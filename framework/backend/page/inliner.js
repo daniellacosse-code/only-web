@@ -24,27 +24,31 @@ export default async function Inliner(request, messagesFolder) {
 
   try {
     Shared.Log({
-      message: `[framework/backend/inliner] Importing messages for language "${request.language}"`,
+      message: `[framework/backend/inliner] Fetching messages for language "${request.language}"`,
       level: "debug",
       detail: {
-        modulePath: `${messagesFolder}/${request.language}.json`,
-        messagesFolder,
-        language: request.language
+        url: `${origin}${messagesFolder}/${request.language}.json`,
+        origin,
+        messagesFolder
       }
     });
-    messages = (
-      await import(`${messagesFolder}/${request.language}.json`, {
-        with: { type: "json" }
-      })
-    ).default;
+    const response = await fetch(
+      `${origin}${messagesFolder}/${request.language}.json`
+    );
     Shared.Log({
-      message: `[framework/backend/inliner] Imported messages for language "${request.language}"`,
+      message: `[framework/backend/inliner] Fetched messages for language "${request.language}"`,
       level: "debug",
-      detail: { messages }
+      detail: { status: response.status, body: await response.text() }
+    });
+
+    messages = await response.json();
+    Shared.Log({
+      message: `[framework/backend/inliner] Parsed messages for language "${request.language}"`,
+      level: "debug"
     });
   } catch (error) {
     Shared.Log({
-      message: `[framework/backend/inliner] Failed to import messages for language "${request.language}"`,
+      message: `[framework/backend/inliner] Failed to fetch messages for language "${request.language}"`,
       level: "warn",
       detail: { error: error.message }
     });
