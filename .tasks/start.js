@@ -38,13 +38,7 @@ async function startOrReloadAppServer() {
   }
 
   const serverCommand = new Deno.Command("deno", {
-    args: [
-      "run",
-      "--allow-net",
-      "--allow-read=.",
-      "--allow-env",
-      "app/default.js"
-    ]
+    args: ["run", "--allow-all", "app/default.js"]
   });
 
   try {

@@ -1,6 +1,7 @@
 // @ts-check
 
 import { encode } from "https://deno.land/std@v0.56.0/encoding/base64.ts";
+import * as path from "https://deno.land/std@0.221.0/path/mod.ts";
 
 import Response from "/framework/backend/page/response.js";
 import Shared from "/framework/shared/module.js";
@@ -20,42 +21,46 @@ export default async function Inliner(request, messagesFolder) {
   const origin = request.url.origin;
 
   /** @type {{[messageIn: string]: string}} */
-  let messages;
+  let messages = {};
 
-  try {
-    Shared.Log({
-      message: `[framework/backend/inliner] Fetching messages for language "${request.language}"`,
-      level: "debug",
-      detail: {
-        url: `${origin}${messagesFolder}/${request.language}.json`,
-        origin,
-        messagesFolder
-      }
-    });
-    const response = await fetch(
-      `${origin}${messagesFolder}/${request.language}.json`,
-      {
-        redirect: "manual"
-      }
-    );
-    Shared.Log({
-      message: `[framework/backend/inliner] Fetched messages for language "${request.language}"`,
-      level: "debug",
-      detail: { status: response.status, body: await response.text() }
-    });
+  if (messagesFolder) {
+    try {
+      const filePath = path.join(
+        Deno.cwd(),
+        messagesFolder,
+        `${request.language}.json`
+      );
 
-    messages = await response.json();
-    Shared.Log({
-      message: `[framework/backend/inliner] Parsed messages for language "${request.language}"`,
-      level: "debug"
-    });
-  } catch (error) {
-    Shared.Log({
-      message: `[framework/backend/inliner] Failed to fetch messages for language "${request.language}"`,
-      level: "warn",
-      detail: { error: error.message }
-    });
-    messages = {};
+      Shared.Log({
+        message: `[framework/backend/inliner] Loading messages for language "${request.language}"`,
+        level: "debug",
+        detail: {
+          filePath
+        }
+      });
+      const decoder = new TextDecoder("utf-8");
+      const file = await Deno.readFile(filePath);
+      const fileContents = decoder.decode(file);
+
+      Shared.Log({
+        message: `[framework/backend/inliner] Loaded messages for language "${request.language}"`,
+        level: "debug",
+        detail: { fileContents }
+      });
+
+      messages = JSON.parse(fileContents);
+      Shared.Log({
+        message: `[framework/backend/inliner] Parsed messages for language "${request.language}"`,
+        level: "debug",
+        detail: { messages }
+      });
+    } catch (error) {
+      Shared.Log({
+        message: `[framework/backend/inliner] Failed to load messages for language "${request.language}"`,
+        level: "warn",
+        detail: { error: error.message }
+      });
+    }
   }
 
   return {
