@@ -33,7 +33,10 @@ export default async function Inliner(request, messagesFolder) {
       }
     });
     const response = await fetch(
-      `${origin}${messagesFolder}/${request.language}.json`
+      `${origin}${messagesFolder}/${request.language}.json`,
+      {
+        redirect: "manual"
+      }
     );
     Shared.Log({
       message: `[framework/backend/inliner] Fetched messages for language "${request.language}"`,
