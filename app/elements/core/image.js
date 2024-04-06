@@ -4,6 +4,11 @@ import "/app/elements/core/loading/skeleton.js";
 
 Frontend.Element.Register("core-image", {
   host: {
+    defaultStyles: Frontend.Element.html`<style>
+        :host {
+          display: inline-block;
+        }
+      </style>`,
     handleMount({ src, alt, ...cdnConfig }) {
       const url = new URL(src);
 
@@ -18,7 +23,7 @@ Frontend.Element.Register("core-image", {
     }
   },
   template: {
-    attributes: {
+    buildAttributes: {
       src: String,
       alt: String,
       width: String,
@@ -28,14 +33,9 @@ Frontend.Element.Register("core-image", {
     handleBuild({ width, height, loaded }) {
       if (loaded) {
         return Frontend.Element.html`<style>
-            :host {
+            img {
               width: ${width};
               height: ${height};
-              display: inline-block;
-            }
-            img {
-              width: 100%;
-              height: 100%;
               object-fit: contain;
               overflow: hidden;
               pointer-events: none;
@@ -44,13 +44,7 @@ Frontend.Element.Register("core-image", {
           ${this.__image__}`;
       }
 
-      return Frontend.Element.html`<style>
-          :host {
-            width: ${width};
-            height: ${height};
-            display: inline-block;
-          }
-        </style>
+      return Frontend.Element.html`
         <core-loading-skeleton></core-loading-skeleton>`;
     }
   }

@@ -2,7 +2,7 @@ import Frontend from "/framework/frontend/module.js";
 
 Frontend.Element.Register("core-text", {
   template: {
-    attributes: {
+    buildAttributes: {
       type: String
     },
     handleBuild({ type = "paragraph" }) {

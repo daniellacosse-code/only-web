@@ -2,7 +2,7 @@ import Frontend from "/framework/frontend/module.js";
 
 Frontend.Element.Register("core-link", {
   template: {
-    attributes: {
+    buildAttributes: {
       href: String
     },
     handleBuild({ href = "#" }) {

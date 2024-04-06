@@ -1,7 +1,6 @@
 import Frontend from "/framework/frontend/module.js";
 
 const sharedStyles = Frontend.Element.html`<style>
-  :host,
   button {
     width: 100%;
     height: 100%;
@@ -40,7 +39,7 @@ const sharedStyles = Frontend.Element.html`<style>
 
 Frontend.Element.Register("core-button", {
   template: {
-    attributes: {
+    buildAttributes: {
       disabled: Boolean
     },
     handleBuild({ disabled }) {
