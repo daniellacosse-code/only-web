@@ -19,6 +19,12 @@ globalThis.HTMLElement = class HTMLElement {
   addEventListener() {}
 };
 
+globalThis.document = {
+  createElement() {
+    return new globalThis.HTMLElement();
+  }
+};
+
 Deno.test("element - register", async () => {
   await register("my-element", {});
 
