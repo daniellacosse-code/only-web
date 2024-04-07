@@ -55,50 +55,47 @@ const sharedStyles = Frontend.Element.html`<style>
 const makeLabelID = (label) => label.toLowerCase().replace(/\s/g, "-");
 
 Frontend.Element.Register("core-input", {
-  host: {
-    handleMount({ label = "" }) {
-      this.setAttribute("tabIndex", 0);
-      this.setAttribute("role", "input");
-
-      const __inputID__ = makeLabelID(label);
-
-      this.addEventListener("focus", () =>
-        this.template.getElementById(__inputID__).focus()
-      );
-
-      this.addEventListener("input", ({ target }) => {
-        const value =
-          target.localName === "input" ? target.value : target.textContent;
-
-        this.value = value;
-
-        this.template
-          .querySelector("label")
-          .classList.toggle("hidden", Boolean(value));
-      });
-    }
+  buildAttributes: {
+    label: String,
+    type: String
   },
-  template: {
-    buildAttributes: {
-      label: String,
-      type: String
-    },
-    handleBuild({ label = "", type = "content" }) {
-      const __inputID__ = makeLabelID(label);
+  handleMount({ label = "" }) {
+    this.setAttribute("tabIndex", 0);
+    this.setAttribute("role", "input");
 
-      let inputElement;
+    const __inputID__ = makeLabelID(label);
 
-      switch (type) {
-        case "text":
-        case "password":
-        case "email":
-        case "search":
-          inputElement = Frontend.Element
-            .html`<input id="${__inputID__}" type="${type}">`;
-          break;
-        case "content":
-        default:
-          inputElement = Frontend.Element.html`
+    this.addEventListener("focus", () =>
+      this.template.getElementById(__inputID__).focus()
+    );
+
+    this.addEventListener("input", ({ target }) => {
+      const value =
+        target.localName === "input" ? target.value : target.textContent;
+
+      this.value = value;
+
+      this.template
+        .querySelector("label")
+        .classList.toggle("hidden", Boolean(value));
+    });
+  },
+  handleBuild({ label = "", type = "content" }) {
+    const __inputID__ = makeLabelID(label);
+
+    let inputElement;
+
+    switch (type) {
+      case "text":
+      case "password":
+      case "email":
+      case "search":
+        inputElement = Frontend.Element
+          .html`<input id="${__inputID__}" type="${type}">`;
+        break;
+      case "content":
+      default:
+        inputElement = Frontend.Element.html`
             <style>
               b, i, u { color: var(--color-foreground); }
               b { font-weight: bold; }
@@ -106,14 +103,13 @@ Frontend.Element.Register("core-input", {
               u { text-decoration: underline; }
             </style>
             <div id="${__inputID__}" contenteditable="true"></div>`;
-      }
+    }
 
-      return Frontend.Element.html`
+    return Frontend.Element.html`
         ${sharedStyles}
         <div class="wrapper">
           <label for="${__inputID__}">${label}</label>
           ${inputElement}
         </div>`;
-    }
   }
 });

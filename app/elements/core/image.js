@@ -3,38 +3,30 @@ import Frontend from "/framework/frontend/module.js";
 import "/app/elements/core/loading/skeleton.js";
 
 Frontend.Element.Register("core-image", {
-  host: {
-    defaultStyles: Frontend.Element.html`<style>
-        :host {
-          display: inline-block;
-        }
-      </style>`,
-    handleMount({ src, alt, ...srcParams }) {
-      const url = new URL(src);
-
-      for (const [key, value] of Object.entries(srcParams)) {
-        url.searchParams.set(key, value);
-      }
-
-      this.__image__ = new Image(srcParams.width, srcParams.height);
-      this.__image__.onload = () =>
-        (this.template.buildAttributes.loaded = true);
-      this.__image__.src = url.toString();
-      this.__image__.alt = alt;
-    }
+  buildAttributes: {
+    src: String,
+    alt: String,
+    width: String,
+    height: String,
+    loaded: Boolean
   },
-  template: {
-    buildAttributes: {
-      src: String,
-      alt: String,
-      width: String,
-      height: String,
-      loaded: Boolean
-    },
-    handleBuild({ width, height, loaded }) {
-      if (loaded) {
-        return Frontend.Element.html`<style>
+  handleMount({ src, alt, ...srcParams }) {
+    const url = new URL(src);
+
+    for (const [key, value] of Object.entries(srcParams)) {
+      url.searchParams.set(key, value);
+    }
+
+    this.__image__ = new Image(srcParams.width, srcParams.height);
+    this.__image__.onload = () => (this.template.buildAttributes.loaded = true);
+    this.__image__.src = url.toString();
+    this.__image__.alt = alt;
+  },
+  handleBuild({ width, height, loaded }) {
+    if (loaded) {
+      return Frontend.Element.html`<style>
             img {
+              display: inline-block;
               width: ${width};
               height: ${height};
               object-fit: contain;
@@ -43,9 +35,9 @@ Frontend.Element.Register("core-image", {
             }
           </style>
           ${this.__image__}`;
-      }
+    }
 
-      return Frontend.Element.html`
+    return Frontend.Element.html`
         <style>
           core-loading-skeleton {
             display: inline-block;
@@ -54,6 +46,5 @@ Frontend.Element.Register("core-image", {
           }
         </style>
         <core-loading-skeleton></core-loading-skeleton>`;
-    }
   }
 });

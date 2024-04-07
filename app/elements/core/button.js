@@ -38,13 +38,12 @@ const sharedStyles = Frontend.Element.html`<style>
 </style>`;
 
 Frontend.Element.Register("core-button", {
-  template: {
-    buildAttributes: {
-      disabled: Boolean
-    },
-    handleBuild({ disabled }) {
-      if (disabled)
-        return Frontend.Element.html`${sharedStyles}
+  buildAttributes: {
+    disabled: Boolean
+  },
+  handleBuild({ disabled }) {
+    if (disabled)
+      return Frontend.Element.html`${sharedStyles}
           <style>
             button {
               cursor: not-allowed;
@@ -55,7 +54,7 @@ Frontend.Element.Register("core-button", {
             <slot></slot>
           </button>`;
 
-      return Frontend.Element.html`${sharedStyles}
+    return Frontend.Element.html`${sharedStyles}
         <style>
           button:hover,
           button:active,
@@ -71,6 +70,5 @@ Frontend.Element.Register("core-button", {
         <button>
           <slot></slot>
         </button>`;
-    }
   }
 });
