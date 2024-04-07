@@ -9,15 +9,16 @@ Frontend.Element.Register("core-image", {
           display: inline-block;
         }
       </style>`,
-    handleMount({ src, alt, ...cdnConfig }) {
+    handleMount({ src, alt, ...srcParams }) {
       const url = new URL(src);
 
-      for (const [key, value] of Object.entries(cdnConfig)) {
+      for (const [key, value] of Object.entries(srcParams)) {
         url.searchParams.set(key, value);
       }
 
-      this.__image__ = new Image(cdnConfig.width, cdnConfig.height);
-      this.__image__.onload = () => (this.template.attributes.loaded = true);
+      this.__image__ = new Image(srcParams.width, srcParams.height);
+      this.__image__.onload = () =>
+        (this.template.buildAttributes.loaded = true);
       this.__image__.src = url.toString();
       this.__image__.alt = alt;
     }
@@ -45,6 +46,13 @@ Frontend.Element.Register("core-image", {
       }
 
       return Frontend.Element.html`
+        <style>
+          core-loading-skeleton {
+            display: inline-block;
+            width: ${width};
+            height: ${height};
+          }
+        </style>
         <core-loading-skeleton></core-loading-skeleton>`;
     }
   }

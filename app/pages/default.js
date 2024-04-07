@@ -149,7 +149,7 @@ Backend.Page.Register(route, {
           <main>
           <nav>
             <header>
-              <core-image src="${logoSrc}" alt="logo" width="64" height="64"></core-image>
+              <core-image src="${logoSrc}" alt="logo" width="64px" height="64px"></core-image>
               <core-text type="title">${inliner.message(
                 "only web 2"
               )}</core-text>
