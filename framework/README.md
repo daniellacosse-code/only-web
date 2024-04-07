@@ -131,6 +131,9 @@ Backend.Page.Register("/", {
 
 ```js
 Backend.Page.Register("/", {
+  inliner: {
+    messages: "%path/to/messages/folder%"
+  },
   responses: {
     handleDefault: (request, inliner) => Backend.Page.Response.html`
       <head>
@@ -143,9 +146,6 @@ Backend.Page.Register("/", {
         <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
       </body>
     `;
-  },
-  inliner: {
-    messages: "%path/to/messages/folder%"
   }
 });
 ```
@@ -227,6 +227,9 @@ Frontend.Element.Register("copy-code", {
 
 ```js
 Backend.Page.Register("/", {
+  inliner: {
+    messages: "%path/to/messages/folder%"
+  },
   responses: {
     handleDefault: (request, inliner) => Backend.Page.Response.html`
       <head>
@@ -242,9 +245,6 @@ Backend.Page.Register("/", {
         <copy-code code="${request.url,search}" copy-message="${inliner.message("Copied!")}"></copy-code>
       </body>
     `;
-  },
-  inliner: {
-    messages: "%path/to/messages/folder%"
   }
 });
 ```
