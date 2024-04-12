@@ -164,6 +164,18 @@ export default (
         );
       }
 
+      /**
+       * @param {string} selector
+       * @returns {HTMLElement | null}
+       * @throws {Error} Throws an error if the selector is invalid
+       * @example
+       * const myElement = document.querySelector("my-element");
+       * myElement.querySelector("div");
+       */
+      querySelector(selector) {
+        return this.template.querySelector(selector);
+      }
+
       #buildTemplate() {
         if (!this.template) {
           Shared.Log({

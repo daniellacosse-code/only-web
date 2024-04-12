@@ -189,14 +189,14 @@ Frontend.Element.Register("copy-code", {
   buildAttributes: { copied: Boolean, ["copy-message"]: String, code: String },
   handleMount: () => {
     this.addEventListener("click", () => {
-      if (this.template.attributes.copied) {
+      if (this.buildAttributes.copied) {
         return;
       }
 
-      globalThis.navigator.clipboard.writeText(this.templateAttributes.code);
+      globalThis.navigator.clipboard.writeText(this.buildAttributes.code);
 
-      this.template.querySelector("div[popover]").togglePopover();
-      this.template.attributes.copied = true;
+      this.querySelector("div[popover]").togglePopover();
+      this.buildAttributes.copied = true;
     });
   },
   handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
