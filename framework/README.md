@@ -95,15 +95,13 @@ This is abstract, so let's walk through a simple example to make things more con
 import Backend from "https://github.com/daniellacosse-code/onlyweb.dev/raw/master/framework/backend/module.js";
 
 Backend.Page.Register("/", {
-  responses: {
-    handleDefault: (request) => Backend.Page.Response.html`
-        <body>
-          <h1>Your search is: ${request.url.search}</h1>
-        </body>
-      `;
-    }
+  handleRequest: (request) => Backend.Page.Response.html`
+    <body>
+      <h1>Your search is: ${request.url.search}</h1>
+    </body>
+  `;
   }
-});
+);
 ```
 
 2. The default response has no metadata, so external sites won't know how to display it.
@@ -111,42 +109,37 @@ Backend.Page.Register("/", {
 
 ```js
 Backend.Page.Register("/", {
-  responses: {
-    handleDefault: (request, inliner) => Backend.Page.Response.html`
-      <head>
-        ${inliner.metadata({
-          title: "what's my search?",
-          description: "a simple page that shows the search query",
-        })}
-      </head>
-      <body>
-        <h1>Your search is: ${request.url.search}</h1>
-      </body>
-    `;
+  handleRequest: (request, inliner) => Backend.Page.Response.html`
+    <head>
+      ${inliner.metadata({
+        title: "what's my search?",
+        description: "a simple page that shows the search query",
+      })}
+    </head>
+    <body>
+      <h1>Your search is: ${request.url.search}</h1>
+    </body>
+  `;
   }
-});
+);
 ```
 
 3. Our page only works in English. Provide the **Inliner** with [a folder of translations like this one](../app/assets/messages/) so we can support those languages:
 
 ```js
 Backend.Page.Register("/", {
-  inliner: {
-    messages: "%path/to/messages/folder%"
-  },
-  responses: {
-    handleDefault: (request, inliner) => Backend.Page.Response.html`
-      <head>
-        ${inliner.metadata({
-          title: inliner.message("what's my search?"),
-          description: inliner.message("a simple page that shows the search query"),
-        })}
-      </head>
-      <body>
-        <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
-      </body>
-    `;
-  }
+  messagesFolder: "%path/to/messages/folder%",
+  handleRequest: (request, inliner) => Backend.Page.Response.html`
+    <head>
+      ${inliner.metadata({
+        title: inliner.message("what's my search?"),
+        description: inliner.message("a simple page that shows the search query"),
+      })}
+    </head>
+    <body>
+      <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
+    </body>
+  `;
 });
 ```
 
@@ -227,26 +220,23 @@ Frontend.Element.Register("copy-code", {
 
 ```js
 Backend.Page.Register("/", {
-  inliner: {
-    messages: "%path/to/messages/folder%"
-  },
-  responses: {
-    handleDefault: (request, inliner) => Backend.Page.Response.html`
-      <head>
-        ${inliner.metadata({
-          title: inliner.message("what's my search?"),
-          description: inliner.message("a simple page that shows the search query"),
-        })}
-      </head>
-      <body>
-        <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
+  messagesFolder: "%path/to/messages/folder%",
+  handleRequest: (request, inliner) => Backend.Page.Response.html`
+    <head>
+      ${inliner.metadata({
+        title: inliner.message("what's my search?"),
+        description: inliner.message("a simple page that shows the search query"),
+      })}
+    </head>
+    <body>
+      <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
 
-        ${inliner.elements("%path/to/element/copy-code.js%")}
-        <copy-code code="${request.url,search}" copy-message="${inliner.message("Copied!")}"></copy-code>
-      </body>
-    `;
+      ${inliner.elements("%path/to/element/copy-code.js%")}
+      <copy-code code="${request.url,search}" copy-message="${inliner.message("Copied!")}"></copy-code>
+    </body>
+  `;
   }
-});
+);
 ```
 
 7. HTML popovers aren't super supported yet, so let's indicate that in our pages' requirements:

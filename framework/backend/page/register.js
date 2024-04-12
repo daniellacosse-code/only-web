@@ -17,12 +17,10 @@ import Shared from "/framework/shared/module.js";
  * Registers a custom page in the global customPages map.
  * @param {string} route The route of the page
  * @param {object} pageOptions The options for the page
- * @param {object} [pageOptions.inliner] The page inliner configuration
- * @param {PlatformRequirements} [pageOptions.inliner.requirements] The platform requirements for the inliner
- * @param {string} [pageOptions.inliner.messages] The messages for the inliner
- * @param {object} pageOptions.responses The response handlers for the page
- * @param {PageHandler} pageOptions.responses.handleDefault The request handler for the page
- * @param {PageHandler} [pageOptions.responses.handleServiceWorker] The service worker request handler for the page
+ * @param {PlatformRequirements} [pageOptions.requirements] The platform requirements for the inliner
+ * @param {string} [pageOptions.messagesFolder] The messages for the inliner
+ * @param {PageHandler} pageOptions.handleRequest The request handler for the page
+ * @param {PageHandler} [pageOptions.handleServiceWorker] The service worker request handler for the page
  * @example Backend.Page.Register("/test", {
  *  requirements: {
  *    engine: { Chrome: 91 },
@@ -39,7 +37,7 @@ import Shared from "/framework/shared/module.js";
  *          <h1>Hello, world!</h1>
  *        </body>
  *     </html>`,
- * handleServiceWorkerRequest: (request) => Backend.Page.Response.js`
+ * handleServiceWorker: (request) => Backend.Page.Response.js`
  *  self.addEventListener("install", (event) => {
  *    event.waitUntil(
  *      caches.open("test").then((cache) => {
@@ -53,11 +51,10 @@ import Shared from "/framework/shared/module.js";
 export default (
   route,
   {
-    inliner: { requirements = { renderer: {}, engine: {} }, messages } = {},
-    responses: {
-      handleDefault,
-      handleServiceWorker = () => PageResponse.html``
-    }
+    requirements = { renderer: {}, engine: {} },
+    messagesFolder,
+    handleRequest,
+    handleServiceWorker = () => PageResponse.html``
   }
 ) => {
   /** @type {typeof globalThis & { customPages?: Map<string, PageHandler> }} */
@@ -84,24 +81,21 @@ export default (
         request.headers.get("accept-language")?.split(",")[0] ??
         "en-US";
 
-      const inliner = await Inliner(request, messages ?? "");
+      const inliner = await Inliner(request, messagesFolder ?? "");
 
       Shared.Log({
         message: `[framework/backend/register] Begun handling request @ "${route}".`,
         detail: request
       });
 
-      if (request.url.searchParams.has("service")) {
+      if (request.url.searchParams.has("sw")) {
         try {
           Shared.Log({
             message: `[framework/backend/register] Constructing service worker response @ "${route}".`
           });
-          const serviceWorkerResponse = await handleServiceWorker(
-            request,
-            inliner
-          );
+          const serviceWorker = await handleServiceWorker(request, inliner);
 
-          if (!serviceWorkerResponse) {
+          if (!serviceWorker) {
             Shared.Log({
               message: `[framework/backend/register] No service worker found @ "${route}".`,
               level: "warn"
@@ -111,10 +105,10 @@ export default (
 
           Shared.Log({
             message: `[framework/backend/register] Serving service worker @ "${route}".`,
-            detail: serviceWorkerResponse
+            detail: serviceWorker
           });
 
-          return serviceWorkerResponse;
+          return serviceWorker;
         } catch (error) {
           Shared.LogError(error);
           return new Response("Internal Server Error", { status: 500 });
@@ -127,7 +121,7 @@ export default (
       });
 
       /** @type {PageResponse} */
-      const response = await handleDefault(request, inliner);
+      const response = await handleRequest(request, inliner);
 
       if (response.mimetype !== "text/html") {
         Shared.Log({
@@ -183,7 +177,7 @@ export default (
                 // register service worker
                 if ("serviceWorker" in navigator) {
                   try {
-                    navigator.serviceWorker.register("${route}?service", {
+                    navigator.serviceWorker.register("${route}?sw", {
                       scope: "${route}"
                     });
                   } catch (error) {

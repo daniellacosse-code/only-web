@@ -6,18 +6,15 @@ import OnlyWebTheme from "/app/pages/shared-theme.js";
 const route = "/";
 
 Backend.Page.Register(route, {
-  inliner: {
-    messages: "/app/assets/messages"
-  },
-  responses: {
-    handleDefault: (request, inliner) => {
-      const logoSrc =
-        (request.url.origin.match(/localhost/)
-          ? request.url.origin
-          : constants.KEYCDN_IMAGE_ZONE_URL) +
-        "/app/assets/images/logo/black.svg";
+  messagesFolder: "/app/assets/messages",
+  handleRequest: (request, inliner) => {
+    const logoSrc =
+      (request.url.origin.match(/localhost/)
+        ? request.url.origin
+        : constants.KEYCDN_IMAGE_ZONE_URL) +
+      "/app/assets/images/logo/black.svg";
 
-      return Backend.Page.Response.html`<head>
+    return Backend.Page.Response.html`<head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="manifest" href="/app/assets/manifest.json" />
@@ -210,8 +207,8 @@ Backend.Page.Register(route, {
             });
           </script>
         </body>`;
-    },
-    handleServiceWorker: () => Backend.Page.Response.js`
+  },
+  handleServiceWorker: () => Backend.Page.Response.js`
       self.addEventListener("install", (event) => {
         event.waitUntil(
           caches.open("${route}").then((cache) => {
@@ -236,5 +233,4 @@ Backend.Page.Register(route, {
           });
         }));
       });`
-  }
 });
