@@ -6,8 +6,9 @@ import OnlyWebTheme from "/app/pages/shared-theme.js";
 const route = "/";
 
 Backend.Page.Register(route, {
-  messagesFolder: "/app/assets/messages",
-  handleRequest: (request, inliner) => {
+  handleRequest: async (request, inliner) => {
+    const inliner = await Backend.Page.Inliner(request, "/app/assets/messages");
+
     const logoSrc =
       (request.url.origin.match(/localhost/)
         ? request.url.origin

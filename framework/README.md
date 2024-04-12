@@ -95,7 +95,7 @@ This is abstract, so let's walk through a simple example to make things more con
 import Backend from "https://github.com/daniellacosse-code/onlyweb.dev/raw/master/framework/backend/module.js";
 
 Backend.Page.Register("/", {
-  handleRequest: (request) => Backend.Page.Response.html`
+  handleRequest: async (request) => Backend.Page.Response.html`
     <body>
       <h1>Your search is: ${request.url.search}</h1>
     </body>
@@ -105,21 +105,24 @@ Backend.Page.Register("/", {
 ```
 
 2. The default response has no metadata, so external sites won't know how to display it.
-   Use the **Inliner** to add some:
+   Create an **Inliner** to add some:
 
 ```js
 Backend.Page.Register("/", {
-  handleRequest: (request, inliner) => Backend.Page.Response.html`
-    <head>
-      ${inliner.metadata({
-        title: "what's my search?",
-        description: "a simple page that shows the search query",
-      })}
-    </head>
-    <body>
-      <h1>Your search is: ${request.url.search}</h1>
-    </body>
-  `;
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(request);
+
+    return Backend.Page.Response.html`
+      <head>
+        ${inliner.metadata({
+          title: "what's my search?",
+          description: "a simple page that shows the search query",
+        })}
+      </head>
+      <body>
+        <h1>Your search is: ${request.url.search}</h1>
+      </body>
+    `;
   }
 );
 ```
@@ -128,19 +131,22 @@ Backend.Page.Register("/", {
 
 ```js
 Backend.Page.Register("/", {
-  messagesFolder: "%path/to/messages/folder%",
-  handleRequest: (request, inliner) => Backend.Page.Response.html`
-    <head>
-      ${inliner.metadata({
-        title: inliner.message("what's my search?"),
-        description: inliner.message("a simple page that shows the search query"),
-      })}
-    </head>
-    <body>
-      <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
-    </body>
-  `;
-});
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(request, "%path/to/messages/folder%");
+
+    return Backend.Page.Response.html`
+      <head>
+        ${inliner.metadata({
+          title: inliner.message("what's my search?"),
+          description: inliner.message("a simple page that shows the search query"),
+        })}
+      </head>
+      <body>
+        <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
+      </body>
+    `;
+  }
+);
 ```
 
 4. We want to be able to easily copy our search string to the clipboard. We'll have to create a new frontend **Element** to do this. Here's that initial file:
@@ -220,21 +226,23 @@ Frontend.Element.Register("copy-code", {
 
 ```js
 Backend.Page.Register("/", {
-  messagesFolder: "%path/to/messages/folder%",
-  handleRequest: (request, inliner) => Backend.Page.Response.html`
-    <head>
-      ${inliner.metadata({
-        title: inliner.message("what's my search?"),
-        description: inliner.message("a simple page that shows the search query"),
-      })}
-    </head>
-    <body>
-      <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(request, "%path/to/messages/folder%");
 
-      ${inliner.elements("%path/to/element/copy-code.js%")}
-      <copy-code code="${request.url,search}" copy-message="${inliner.message("Copied!")}"></copy-code>
-    </body>
-  `;
+    return Backend.Page.Response.html`
+      <head>
+        ${inliner.metadata({
+          title: inliner.message("what's my search?"),
+          description: inliner.message("a simple page that shows the search query"),
+        })}
+      </head>
+      <body>
+        <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
+
+        ${inliner.elements("%path/to/element/copy-code.js%")}
+        <copy-code code="${request.url.search}" copy-message="${inliner.message("Copied!")}"></copy-code>
+      </body>
+    `;
   }
 );
 ```

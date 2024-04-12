@@ -4,7 +4,9 @@ import * as constants from "/app/constants.js";
 import OnlyWebTheme from "/app/pages/shared-theme.js";
 
 Backend.Page.Register("/__gallery__", {
-  handleRequest: (request, inliner) => {
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(request, "/app/assets/messages");
+
     const logoSrc =
       (request.url.origin.match(/localhost/)
         ? request.url.origin

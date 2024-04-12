@@ -2,7 +2,6 @@
 
 import PageResponse from "./response.js";
 import * as constants from "../constants.js";
-import Inliner from "./inliner.js";
 import Shared from "/framework/shared/module.js";
 
 /**
@@ -52,7 +51,6 @@ export default (
   route,
   {
     requirements = { renderer: {}, engine: {} },
-    messagesFolder,
     handleRequest,
     handleServiceWorker = () => PageResponse.html``
   }
@@ -81,8 +79,6 @@ export default (
         request.headers.get("accept-language")?.split(",")[0] ??
         "en-US";
 
-      const inliner = await Inliner(request, messagesFolder ?? "");
-
       Shared.Log({
         message: `[framework/backend/register] Begun handling request @ "${route}".`,
         detail: request
@@ -93,7 +89,7 @@ export default (
           Shared.Log({
             message: `[framework/backend/register] Constructing service worker response @ "${route}".`
           });
-          const serviceWorker = await handleServiceWorker(request, inliner);
+          const serviceWorker = await handleServiceWorker(request);
 
           if (!serviceWorker) {
             Shared.Log({
@@ -121,7 +117,7 @@ export default (
       });
 
       /** @type {PageResponse} */
-      const response = await handleRequest(request, inliner);
+      const response = await handleRequest(request);
 
       if (response.mimetype !== "text/html") {
         Shared.Log({
