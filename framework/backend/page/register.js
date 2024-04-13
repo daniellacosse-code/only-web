@@ -15,11 +15,10 @@ import Shared from "/framework/shared/module.js";
 /**
  * Registers a custom page in the global customPages map.
  * @param {string} route The route of the page
- * @param {object} pageOptions The options for the page
- * @param {PlatformRequirements} [pageOptions.requirements] The platform requirements for the inliner
- * @param {string} [pageOptions.messagesFolder] The messages for the inliner
- * @param {PageHandler} pageOptions.handleRequest The request handler for the page
- * @param {PageHandler} [pageOptions.handleServiceWorker] The service worker request handler for the page
+ * @param {object} options The options for the page
+ * @param {PlatformRequirements} [options.requirements] The platform requirements for the inliner
+ * @param {PageHandler} options.handleRequest The request handler for the page
+ * @param {PageHandler} [options.handleServiceWorker] The service worker request handler for the page
  * @example Backend.Page.Register("/test", {
  *  requirements: {
  *    engine: { Chrome: 91 },
@@ -47,14 +46,7 @@ import Shared from "/framework/shared/module.js";
  * });
  * @returns {void} Nothing is returned: the page is registered in the global customPages map
  */
-export default (
-  route,
-  {
-    requirements = { renderer: {}, engine: {} },
-    handleRequest,
-    handleServiceWorker = () => PageResponse.html``
-  }
-) => {
+export default (route, options) => {
   /** @type {typeof globalThis & { customPages?: Map<string, PageHandler> }} */
   const typedGlobalThis = globalThis;
 
@@ -65,6 +57,14 @@ export default (
       message: `[framework/backend/register] Page "${route}" already registered.`,
       level: "warn"
     });
+
+  if (typeof options === "function") {
+    options = {
+      handleRequest: options
+    };
+  }
+
+  const { handleRequest, handleServiceWorker = () => {} } = options;
 
   typedGlobalThis.customPages.set(
     route,

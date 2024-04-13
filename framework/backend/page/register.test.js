@@ -19,3 +19,19 @@ Deno.test("register", async () => {
     true
   );
 });
+
+Deno.test("function register", async () => {
+  await register("/", () => new Response());
+
+  assertEquals(Boolean(globalThis.customPages.get("/")), true);
+  assertEquals(
+    Boolean(globalThis.customPages.get("/")(new Request("localhost:8000"))),
+    true
+  );
+  assertEquals(
+    Boolean(
+      globalThis.customPages.get("/")(new Request("localhost:8000/?service"))
+    ),
+    true
+  );
+});

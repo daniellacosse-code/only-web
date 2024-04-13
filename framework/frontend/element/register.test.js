@@ -35,6 +35,16 @@ Deno.test("element - register", async () => {
   );
 });
 
+Deno.test("element - function register", async () => {
+  await register("my-element", () => {});
+
+  assertEquals(Boolean(globalThis.customElements.get("my-element")), true);
+  assertEquals(
+    new globalThis.customElements["my-element"]() instanceof HTMLElement,
+    true
+  );
+});
+
 Deno.test("element - addEventListener", async () => {
   await register("my-element", { handleBuild: () => {} });
 

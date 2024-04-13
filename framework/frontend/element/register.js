@@ -24,20 +24,25 @@ import html from "./html.js";
  * });
  * @returns {void} Nothing is returned: the element is registered in the global customElements map
  */
-export default (
-  tag,
-  {
-    buildAttributes = {},
-    handleBuild,
-    handleMount = () => {},
-    handleDismount = () => {}
-  }
-) => {
+export default (tag, options) => {
   if (globalThis.customElements.get(tag))
     return Shared.Log({
       message: `Element ${tag} already registered.`,
       level: "warn"
     });
+
+  if (typeof options === "function") {
+    options = {
+      handleBuild: options
+    };
+  }
+
+  const {
+    buildAttributes = {},
+    handleBuild,
+    handleMount = () => {},
+    handleDismount = () => {}
+  } = options;
 
   globalThis.customElements.define(
     tag,
