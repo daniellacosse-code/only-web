@@ -28,7 +28,7 @@
 
 /**
  * A handler for a page request.
- * @typedef {(request: PageRequest, inliner: Inliner) => Promise<PageResponse>} PageHandler
+ * @typedef {(request: PageRequest) => Promise<PageResponse>} PageHandler
  * @memberof Page
  */
 

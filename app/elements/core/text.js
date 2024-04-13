@@ -1,12 +1,11 @@
 import Frontend from "/framework/frontend/module.js";
 
 Frontend.Element.Register("core-text", {
-  template: {
-    attributes: {
-      type: String
-    },
-    handleBuild({ type = "paragraph" }) {
-      return Frontend.Element.html`<style>
+  buildAttributes: {
+    type: String
+  },
+  handleBuild({ type = "paragraph" }) {
+    return Frontend.Element.html`<style>
           slot {
             cursor: inherit;
             font-family: system-ui;
@@ -20,6 +19,5 @@ Frontend.Element.Register("core-text", {
           }
         </style>
         <slot></slot>`;
-    }
   }
 });

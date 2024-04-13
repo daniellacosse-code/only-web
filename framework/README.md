@@ -59,8 +59,8 @@ block-beta
     columns 2
     frontend:2
     element:2
-    host
-    template
+    attributes
+    build
   end
 ```
 
@@ -76,11 +76,11 @@ The backend server serves content via Deno. Key concepts:
 
 ### frontend
 
-The frontend renders content in the browser via WebComponnents. Key concepts:
+The frontend renders content in the browser via WebComponents. Key concepts:
 
 1. **Element**: an HTML tag representing some meaningful section or component of your application. Each custom **Element** is basically like a little, nested website. [Learn more about HTML Elements here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
-2. **Host**: an in-memory object representing the current **Element** instance. Through its **Host** you access an **Element**'s lifecycle, events, and parent context. Think of it as the _"face"_ of the **Element**.
-3. **Template**: the blueprint for the **Element**'s internals, driven by a set of data attributes you select. It's a bit of a departure from the norm, but think of it as the _"guts"_ of the **Element**.
+2. **Attribute**: a property of an **Element** that can be set and read. Attributes are used to pass data to **Elements**. [Learn more about HTML Attributes here](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes).
+3. **Build**: the process of creating an **Element** from a set of **Attributes**. This is where you define the structure of your **Element**.
 
 This is abstract, so let's walk through a simple example to make things more concrete.
 
@@ -95,24 +95,24 @@ This is abstract, so let's walk through a simple example to make things more con
 import Backend from "https://github.com/daniellacosse-code/onlyweb.dev/raw/master/framework/backend/module.js";
 
 Backend.Page.Register("/", {
-  responses: {
-    handleDefault: (request) => Backend.Page.Response.html`
-        <body>
-          <h1>Your search is: ${request.url.search}</h1>
-        </body>
-      `;
-    }
+  handleRequest: async (request) => Backend.Page.Response.html`
+    <body>
+      <h1>Your search is: ${request.url.search}</h1>
+    </body>
+  `;
   }
-});
+);
 ```
 
 2. The default response has no metadata, so external sites won't know how to display it.
-   Use the **Inliner** to add some:
+   Create an **Inliner** to add some:
 
 ```js
 Backend.Page.Register("/", {
-  responses: {
-    handleDefault: (request, inliner) => Backend.Page.Response.html`
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(request);
+
+    return Backend.Page.Response.html`
       <head>
         ${inliner.metadata({
           title: "what's my search?",
@@ -124,15 +124,17 @@ Backend.Page.Register("/", {
       </body>
     `;
   }
-});
+);
 ```
 
 3. Our page only works in English. Provide the **Inliner** with [a folder of translations like this one](../app/assets/messages/) so we can support those languages:
 
 ```js
 Backend.Page.Register("/", {
-  responses: {
-    handleDefault: (request, inliner) => Backend.Page.Response.html`
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(request, "%path/to/messages/folder%");
+
+    return Backend.Page.Response.html`
       <head>
         ${inliner.metadata({
           title: inliner.message("what's my search?"),
@@ -143,11 +145,8 @@ Backend.Page.Register("/", {
         <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
       </body>
     `;
-  },
-  inliner: {
-    messages: "%path/to/messages/folder%"
   }
-});
+);
 ```
 
 4. We want to be able to easily copy our search string to the clipboard. We'll have to create a new frontend **Element** to do this. Here's that initial file:
@@ -156,82 +155,70 @@ Backend.Page.Register("/", {
 import Frontend from "https://github.com/daniellacosse-code/onlyweb.dev/raw/master/framework/frontend/module.js";
 
 Frontend.Element.Register("copy-code", {
-  template: {
-    attributes: { copied: Boolean, ["copy-message"]: String, code: String },
-    // Note that the html template tag here is different than the Backends'
-    handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
-      <style>
-        div {
-          display: relative;
-        }
-        code {
-          font-family: monospace;
-          font-size: 1rem;
-          text-overflow: ellipsis;
-        }
-        div[popover] {
-          display: absolute;
-          top: 0;
-          left: 0;
-        }
-      </style>
-      <div>
-        <code>${code}</code>
-        <div popover>${copyMessage}</div>
-      </div>
-    `;
-  }
+  buildAttributes: { copied: Boolean, ["copy-message"]: String, code: String },
+  // Note that the html template tag here is different than the Backends'
+  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
+    <style>
+      div {
+        display: relative;
+      }
+      code {
+        font-family: monospace;
+        font-size: 1rem;
+        text-overflow: ellipsis;
+      }
+      div[popover] {
+        display: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+    <div>
+      <code>${code}</code>
+      <div popover>${copyMessage}</div>
+    </div>
+  `;
 });
 ```
 
-> [!TIP]
-> Think of each onlyweb element as a little website that's hosted by the parent website. This means that if you style the `:host` in the template, those styles are modifiable by the host. Be aware of what that host might be! Each onlyweb element resets its styles for cross-browser consistency, so that will happen when you host an element inside another element. If you have styles you want to be consistent across all instances of an element, often it makes sense to style the `<slot>` or a wrapper.
-
-> **TODO([#193](https://github.com/daniellacosse-code/onlyweb.dev/issues/193)): short guide on when to use `:host` selector in the template**
-
-5. The onlyweb framework simply wraps the existing Event API to handle I/O. To do the copy, listen for a click event on the **Host**:
+5. The onlyweb framework simply wraps the existing Event API to handle I/O. To do the copy, listen for a click event on mount:
 
 ```js
 Frontend.Element.Register("copy-code", {
-  host: {
-    handleMount: () => {
-      this.addEventListener("click", () => {
-        if (this.template.attributes.copied) {
-          return;
-        }
+  buildAttributes: { copied: Boolean, ["copy-message"]: String, code: String },
+  handleMount: () => {
+    this.addEventListener("click", () => {
+      if (this.buildAttributes.copied) {
+        return;
+      }
 
-        globalThis.navigator.clipboard.writeText(this.templateAttributes.code);
+      globalThis.navigator.clipboard.writeText(this.buildAttributes.code);
 
-        this.template.querySelector("div[popover]").togglePopover();
-        this.template.attributes.copied = true;
-      });
-    }
+      this.querySelector("div[popover]").togglePopover();
+      this.buildAttributes.copied = true;
+    });
   },
-  template: {
-    attributes: { copied: Boolean, ["copy-message"]: String, code: String },
-    // Note that the html template tag here is different than the Backends'
-    handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
-      <style>
-        div {
-          display: relative;
-        }
-        code {
-          font-family: monospace;
-          font-size: 1rem;
-          text-overflow: ellipsis;
-        }
-        div[popover] {
-          display: absolute;
-          top: 0;
-          left: 0;
-        }
-      </style>
-      <div>
-        <code>${code}</code>
-        <div popover>${copyMessage}</div>
-      </div>
-    `;
-  }
+  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
+    <style>
+      div {
+        display: relative;
+      }
+      code {
+        font-family: monospace;
+        font-size: 1rem;
+        text-overflow: ellipsis;
+      }
+      div[popover] {
+        display: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+    <div>
+      <code>${code}</code>
+      <div popover>${copyMessage}</div>
+    </div>
+  `;
 });
 ```
 
@@ -239,8 +226,10 @@ Frontend.Element.Register("copy-code", {
 
 ```js
 Backend.Page.Register("/", {
-  responses: {
-    handleDefault: (request, inliner) => Backend.Page.Response.html`
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(request, "%path/to/messages/folder%");
+
+    return Backend.Page.Response.html`
       <head>
         ${inliner.metadata({
           title: inliner.message("what's my search?"),
@@ -251,14 +240,11 @@ Backend.Page.Register("/", {
         <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
 
         ${inliner.elements("%path/to/element/copy-code.js%")}
-        <copy-code code="${request.url,search}" copy-message="${inliner.message("Copied!")}"></copy-code>
+        <copy-code code="${request.url.search}" copy-message="${inliner.message("Copied!")}"></copy-code>
       </body>
     `;
-  },
-  inliner: {
-    messages: "%path/to/messages/folder%"
   }
-});
+);
 ```
 
 7. HTML popovers aren't super supported yet, so let's indicate that in our pages' requirements:

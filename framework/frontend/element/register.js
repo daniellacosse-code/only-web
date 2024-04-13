@@ -9,12 +9,10 @@ import html from "./html.js";
  * Registers a custom element with the global customElements map
  * @param {string} tag The tag of the element
  * @param {object} options The options setting up the element
- * @param {object} [options.host] The host options
- * @param {(attributes: object) => void} [options.host.handleMount] Is called when the element is mounted: use it to set up the shadow DOM and register event listeners
- * @param {(attributes: object) => void} [options.host.handleDismount] The dismount handler: use it to clean up event listeners and other resources
- * @param {object} options.template The template options
- * @param {{ [name: string]: function }} [options.template.attributes] The attributes of the element, that, when modified, will trigger a template build
- * @param {(attributes: object) => HTMLCollection} options.template.handleBuild The core of the element: use it to build the template from which the shadow DOM will be constructed
+ * @param {{ [name: string]: function }} [options.buildAttributes] The attributes of the element, that, when modified, will trigger a template build
+ * @param {(attributes: object) => HTMLCollection} options.handleBuild The core of the element: use it to build the template from which the shadow DOM will be constructed
+ * @param {(attributes: object) => void} [options.handleMount] Is called when the element is mounted: use it to set up the shadow DOM and register event listeners
+ * @param {(attributes: object) => void} [options.handleDismount] The dismount handler: use it to clean up event listeners and other resources
  * @example Register("my-element", {
  *  template: {
  *    attributes: {
@@ -29,10 +27,10 @@ import html from "./html.js";
 export default (
   tag,
   {
-    host: { handleMount = () => {}, handleDismount = () => {} } = {},
-    template: { attributes = {}, handleBuild } = {
-      handleBuild: () => html`<slot></slot>`
-    }
+    buildAttributes = {},
+    handleBuild,
+    handleMount = () => {},
+    handleDismount = () => {}
   }
 ) => {
   if (globalThis.customElements.get(tag))
@@ -45,7 +43,7 @@ export default (
     tag,
     class extends HTMLElement {
       // element data - template attributes
-      static observedAttributes = Object.keys(attributes);
+      static observedAttributes = Object.keys(buildAttributes);
 
       #eventController = new AbortController();
 
@@ -63,9 +61,9 @@ export default (
         this.#handleTemplateBuild = handleBuild.bind(this);
         this.#handleDismount = handleDismount.bind(this);
 
-        /** @type {ShadowRoot & { attributes?: {} }} */
+        /** @type {ShadowRoot & { buildAttributes?: {} }} */
         this.template = this.attachShadow({ mode: "open" });
-        this.template.attributes = new Proxy(
+        this.template.buildAttributes = new Proxy(
           {},
           {
             deleteProperty: (_, name) => {
@@ -94,7 +92,7 @@ export default (
           level: "debug"
         });
 
-        this.#handleMount(this.template.attributes ?? {});
+        this.#handleMount(this.template.buildAttributes ?? {});
         this.#buildTemplate();
       }
 
@@ -119,7 +117,7 @@ export default (
           level: "debug"
         });
 
-        this.#handleDismount(this.template.attributes ?? {});
+        this.#handleDismount(this.template.buildAttributes ?? {});
 
         this.#eventController.abort();
       }
@@ -166,6 +164,18 @@ export default (
         );
       }
 
+      /**
+       * @param {string} selector
+       * @returns {HTMLElement | null}
+       * @throws {Error} Throws an error if the selector is invalid
+       * @example
+       * const myElement = document.querySelector("my-element");
+       * myElement.querySelector("div");
+       */
+      querySelector(selector) {
+        return this.template.querySelector(selector);
+      }
+
       #buildTemplate() {
         if (!this.template) {
           Shared.Log({
@@ -181,7 +191,7 @@ export default (
         });
 
         const templateResult =
-          this.#handleTemplateBuild(this.template.attributes ?? {}) ??
+          this.#handleTemplateBuild(this.template.buildAttributes ?? {}) ??
           html`<slot></slot>`;
         const templateWrapper = html`<template>
           <style>
@@ -226,7 +236,7 @@ export default (
        * @param {*} value
        */
       #RESOLVE_ATTRIBUTE(name, value) {
-        const resolver = attributes[name] ?? String;
+        const resolver = buildAttributes[name] ?? String;
 
         if (value === null) return void 0;
         if (resolver === Boolean) return this.#RESOLVE_BOOLEAN_ATTRIBUTE(value);

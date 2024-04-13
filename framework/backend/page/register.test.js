@@ -3,10 +3,8 @@ import register from "/framework/backend/page/register.js";
 
 Deno.test("register", async () => {
   await register("/", {
-    responses: {
-      handleDefault: () => new Response(),
-      handleServiceWorker: () => new Response()
-    }
+    handleRequest: () => new Response(),
+    handleServiceWorker: () => new Response()
   });
 
   assertEquals(Boolean(globalThis.customPages.get("/")), true);

@@ -1,12 +1,11 @@
 import Frontend from "/framework/frontend/module.js";
 
 Frontend.Element.Register("core-link", {
-  template: {
-    attributes: {
-      href: String
-    },
-    handleBuild({ href = "#" }) {
-      return Frontend.Element.html`<style>
+  buildAttributes: {
+    href: String
+  },
+  handleBuild({ href = "#" }) {
+    return Frontend.Element.html`<style>
           a,
           a::selection {
             cursor: ne-resize;
@@ -22,6 +21,5 @@ Frontend.Element.Register("core-link", {
           }
         </style>
         <a href="${href}" target="_blank"><slot></slot></a>`;
-    }
   }
 });

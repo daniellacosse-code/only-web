@@ -19,8 +19,14 @@ globalThis.HTMLElement = class HTMLElement {
   addEventListener() {}
 };
 
+globalThis.document = {
+  createElement() {
+    return new globalThis.HTMLElement();
+  }
+};
+
 Deno.test("element - register", async () => {
-  await register("my-element", {});
+  await register("my-element", { handleBuild: () => {} });
 
   assertEquals(Boolean(globalThis.customElements.get("my-element")), true);
   assertEquals(
@@ -30,7 +36,7 @@ Deno.test("element - register", async () => {
 });
 
 Deno.test("element - addEventListener", async () => {
-  await register("my-element", {});
+  await register("my-element", { handleBuild: () => {} });
 
   const element = new globalThis.customElements["my-element"]();
 
