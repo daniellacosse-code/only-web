@@ -116,7 +116,7 @@ Backend.Page.Register("/", {
       <head>
         ${inliner.metadata({
           title: "what's my search?",
-          description: "a simple page that shows the search query",
+          description: "a simple page that shows the search query"
         })}
       </head>
       <body>
@@ -124,7 +124,7 @@ Backend.Page.Register("/", {
       </body>
     `;
   }
-);
+});
 ```
 
 3. Our page only works in English. Provide the **Inliner** with [a folder of translations like this one](../app/assets/messages/) so we can support those languages:
@@ -132,13 +132,18 @@ Backend.Page.Register("/", {
 ```js
 Backend.Page.Register("/", {
   handleRequest: async (request) => {
-    const inliner = await Backend.Page.Inliner(request, "%path/to/messages/folder%");
+    const inliner = await Backend.Page.Inliner(
+      request,
+      "%path/to/messages/folder%"
+    );
 
     return Backend.Page.Response.html`
       <head>
         ${inliner.metadata({
           title: inliner.message("what's my search?"),
-          description: inliner.message("a simple page that shows the search query"),
+          description: inliner.message(
+            "a simple page that shows the search query"
+          )
         })}
       </head>
       <body>
@@ -146,7 +151,7 @@ Backend.Page.Register("/", {
       </body>
     `;
   }
-);
+});
 ```
 
 4. We want to be able to easily copy our search string to the clipboard. We'll have to create a new frontend **Element** to do this. Here's that initial file:
@@ -227,29 +232,70 @@ Frontend.Element.Register("copy-code", {
 ```js
 Backend.Page.Register("/", {
   handleRequest: async (request) => {
-    const inliner = await Backend.Page.Inliner(request, "%path/to/messages/folder%");
+    const inliner = await Backend.Page.Inliner(
+      request,
+      "%path/to/messages/folder%"
+    );
 
     return Backend.Page.Response.html`
       <head>
         ${inliner.metadata({
           title: inliner.message("what's my search?"),
-          description: inliner.message("a simple page that shows the search query"),
+          description: inliner.message(
+            "a simple page that shows the search query"
+          )
         })}
+        ${inliner.elements("%path/to/element/copy-code.js%")}
       </head>
       <body>
         <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
 
-        ${inliner.elements("%path/to/element/copy-code.js%")}
-        <copy-code code="${request.url.search}" copy-message="${inliner.message("Copied!")}"></copy-code>
+        <copy-code code="${request.url.search}" copy-message="${inliner.message(
+      "Copied!"
+    )}"></copy-code>
       </body>
     `;
   }
-);
+});
 ```
 
 7. HTML popovers aren't super supported yet, so let's indicate that in our pages' requirements:
 
-> TODO([#170](https://github.com/daniellacosse-code/onlyweb.dev/issues/170)): this doesn't quite work yet
+```js
+Backend.Page.Register("/", {
+  requirements: {
+    engine: {
+      Firefox: "125",
+      Safari: "17.0"
+    }
+  },
+  handleRequest: async (request) => {
+    const inliner = await Backend.Page.Inliner(
+      request,
+      "%path/to/messages/folder%"
+    );
+
+    return Backend.Page.Response.html`
+      <head>
+        ${inliner.metadata({
+          title: inliner.message("what's my search?"),
+          description: inliner.message(
+            "a simple page that shows the search query"
+          )
+        })}
+        ${inliner.elements("%path/to/element/copy-code.js%")}
+      </head>
+      <body>
+        <h1>${inliner.message("Your search is:")} ${request.url.search}</h1>
+
+        <copy-code code="${request.url.search}" copy-message="${inliner.message(
+      "Copied!"
+    )}"></copy-code>
+      </body>
+    `;
+  }
+});
+```
 
 8. Finally, create a new file for your app's main entrypoint. Import your page and start the backend!
 
