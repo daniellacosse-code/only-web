@@ -64,7 +64,11 @@ export default (route, options) => {
     };
   }
 
-  const { handleRequest, handleServiceWorker = () => {} } = options;
+  const {
+    requirements = {},
+    handleRequest,
+    handleServiceWorker = () => {}
+  } = options;
 
   typedGlobalThis.customPages.set(
     route,
@@ -148,8 +152,10 @@ export default (route, options) => {
                     navigator.userAgent &&
                     Shared.UserAgent.check(
                       Shared.UserAgent.parse(navigator.userAgent),
-                      // TODO(#170): support inlining objects so that we can merge in page-specific requirements
-                      Frontend.requirements.userAgent
+                      Shared.UserAgent.merge(
+                        ${requirements},
+                        Frontend.requirements.userAgent
+                      )                        
                     )
                   )
                 ) {
