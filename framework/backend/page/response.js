@@ -1,7 +1,6 @@
 // @ts-check
 
 import Shared from "/framework/shared/module.js";
-
 /**
  * A utility for creating a templateable response with a specific mimetype
  * @param {string} [mimetype] The mimetype
@@ -46,14 +45,41 @@ const _Response = (mimetype = "text/html") => {
       Shared.handleTemplate({
         template,
         insertions,
-        handleInsertion: (insertion) =>
-          insertion instanceof MimetypeResponse
-            ? Shared.HTML.minify(insertion.content)
-            : Shared.HTML.escape(
-                Array.isArray(insertion)
-                  ? insertion.join("")
-                  : String(insertion)
-              )
+        handleInsertion: (insertion) => {
+          if (insertion instanceof MimetypeResponse) {
+            return Shared.HTML.minify(insertion.content);
+          }
+
+          const subinsertions = Array.isArray(insertion)
+            ? insertion.reverse()
+            : [insertion];
+          const result = [];
+
+          while (subinsertions.length) {
+            const subinsertion = subinsertions.pop();
+
+            // handle array
+            if (Array.isArray(subinsertion)) {
+              subinsertions.unshift(...subinsertion);
+
+              // handle function
+            } else if (typeof subinsertion === "function") {
+              result.push(subinsertion.toString());
+
+              // handle vanilla object
+            } else if (String(subinsertion) === "[object Object]") {
+              result.push(JSON.stringify(subinsertion));
+
+              // handle string, number
+            } else if (typeof subinsertion === "string") {
+              result.push(Shared.HTML.escape(String(subinsertion)));
+            } else if (typeof subinsertion === "number") {
+              result.push(subinsertion);
+            }
+          }
+
+          return result.join("");
+        }
       })
     );
 };

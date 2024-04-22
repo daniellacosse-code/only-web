@@ -22,7 +22,7 @@
 
 /**
  * A utility for creating a templateable page response with a specific mimetype.
- * @typedef {(templateArray: TemplateStringsArray, ...insertions: (number | string | string[])[]) => PageResponse} PageTemplate
+ * @typedef {(templateArray: TemplateStringsArray, ...insertions: any[]) => PageResponse} PageTemplate
  * @memberof Page
  */
 

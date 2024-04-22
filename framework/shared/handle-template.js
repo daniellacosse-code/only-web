@@ -5,7 +5,7 @@
  * @param {object} options The options
  * @param {TemplateStringsArray} options.template The template
  * @param {Array<any>} options.insertions The items to insert into the template
- * @param {(insertion: number | string | string[]) => string} options.handleInsertion The function to handle the insertions
+ * @param {(insertion: any) => string} options.handleInsertion The function to handle the insertions
  * @returns {string} The compiled template
  * @example const unsafeHtml = handleTemplate({
  *  template: ["<div>", "</div>"],
