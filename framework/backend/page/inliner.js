@@ -64,19 +64,26 @@ export default async function Inliner(request, messagesFolder) {
   }
 
   return {
-    elements(...filePaths) {
+    elements(...elementFunctionsOrFilePaths) {
       const result = [];
       Shared.Log({
-        message: `[framework/backend/inliner#elements] inlining elements "${filePaths.join(
+        message: `[framework/backend/inliner#elements] inlining elements "${elementFunctionsOrFilePaths.join(
           ", "
         )}"`,
         level: "debug"
       });
 
-      for (const filePath of filePaths) {
-        const fileContents = Deno.readTextFileSync(`.${filePath}`);
+      for (const functionOrFilePath of elementFunctionsOrFilePaths) {
+        let fileContents;
+
+        if (typeof functionOrFilePath === "function") {
+          fileContents = `(${functionOrFilePath.toString()})();`;
+        } else {
+          fileContents = Deno.readTextFileSync(`.${functionOrFilePath}`);
+        }
+
         Shared.Log({
-          message: `[framework/backend/inliner#elements] loaded element "${filePath}"`,
+          message: `[framework/backend/inliner#elements] loaded element "${functionOrFilePath}"`,
           level: "debug"
         });
 
@@ -89,13 +96,13 @@ export default async function Inliner(request, messagesFolder) {
           src="data:application/javascript;base64,${encode(sanitizedScript)}"
         ></script>`);
         Shared.Log({
-          message: `[framework/backend/inliner#elements] inlined element "${filePath}"`,
+          message: `[framework/backend/inliner#elements] inlined element "${functionOrFilePath}"`,
           level: "debug"
         });
       }
 
       Shared.Log({
-        message: `[framework/backend/inliner#elements] completed for "${filePaths.join(
+        message: `[framework/backend/inliner#elements] completed for "${elementFunctionsOrFilePaths.join(
           ", "
         )}"`,
         level: "debug"
