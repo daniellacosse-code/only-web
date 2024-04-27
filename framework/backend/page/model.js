@@ -35,8 +35,8 @@
 /**
  * A context-aware inliner that can inline elements, messages, and metadata into a document.
  * @typedef Inliner
- * @property {(...filePaths: Array<string | function>) => Response} elements Inlines the given custom element registrations into the HTML document.
- * @property {(message: string) => string} message Retrieves the translated message with the given key.
+ * @property {(...functionOrFilePath: Array<string | function>) => Response} elements Inlines the given custom element registrations into the HTML document.
+ * @property {(message: string) => string} message Retrieves the translated message for a given key.
  * @property {(metadata: InlineHTMLMetadata) => Response} metadata Inlines the given metadata into the HTML document.
  */
 

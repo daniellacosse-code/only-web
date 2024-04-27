@@ -93,8 +93,9 @@ export default async function Inliner(request, messagesFolder) {
         result.push(Response.html`<script
           async
           type="module"
-          src="data:application/javascript;base64,${encode(sanitizedScript)}"
-        ></script>`);
+          src="data:application/javascript;base64,${encode(
+            sanitizedScript
+          )}"></script>`);
         Shared.Log({
           message: `[framework/backend/inliner#elements] inlined element "${functionOrFilePath}"`,
           level: "debug"
