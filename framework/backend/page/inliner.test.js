@@ -8,10 +8,10 @@ Deno.test("Inliner", async () => {
     language: "en"
   });
 
-  // assertEquals(
-  //   await inliner.elements("/app/assets/scripts/test.js"),
-  //   `<script async type="module" src="data:application/javascript;base64,aW1wb3J0ICJodG1sIg=="></script>`
-  // );
+  assertEquals(
+    await inliner.elements(() => "register element").content,
+    `<script async type="module" src="data:application/javascript;base64,KCgpID0+ICJyZWdpc3RlciBlbGVtZW50IikoKTs="></script>`
+  );
 
   assertEquals(await inliner.message("test"), "test");
   assertEquals(
