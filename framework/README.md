@@ -92,7 +92,7 @@ This is abstract, so let's walk through a simple example to make things more con
 1. Start by registering the main **Page** we're going to serve from the backend:
 
 ```js
-import Backend from "https://github.com/daniellacosse-code/onlyweb.dev/raw/master/framework/backend/module.js";
+import Backend from "https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/main/framework/backend/module.js";
 
 Backend.Page.Register("/", {
   handleRequest: async (request) => Backend.Page.Response.html`
@@ -157,7 +157,7 @@ Backend.Page.Register("/", {
 4. We want to be able to easily copy our search string to the clipboard. We'll have to create a new frontend **Element** to do this. Here's that initial file:
 
 ```js
-import Frontend from "https://github.com/daniellacosse-code/onlyweb.dev/raw/master/framework/frontend/module.js";
+import Frontend from "https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/main/framework/frontend/module.js";
 
 Frontend.Element.Register("copy-code", {
   buildAttributes: { copied: Boolean, ["copy-message"]: String, code: String },
@@ -182,7 +182,7 @@ Frontend.Element.Register("copy-code", {
       <code>${code}</code>
       <div popover>${copyMessage}</div>
     </div>
-  `;
+  `
 });
 ```
 
@@ -223,7 +223,7 @@ Frontend.Element.Register("copy-code", {
       <code>${code}</code>
       <div popover>${copyMessage}</div>
     </div>
-  `;
+  `
 });
 ```
 
@@ -300,7 +300,7 @@ Backend.Page.Register("/", {
 8. Finally, create a new file for your app's main entrypoint. Import your page and start the backend!
 
 ```js
-import Backend from "https://github.com/daniellacosse-code/onlyweb.dev/raw/master/framework/backend/module.js";
+import Backend from "https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/main/framework/backend/module.js";
 
 import "%path/to/page.js%";
 
