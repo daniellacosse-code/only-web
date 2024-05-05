@@ -2,8 +2,8 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import escape from "../../shared/html/escape.js";
-import handleTemplate from "../../shared/handle-template.js";
+import escape from "/framework/shared/html/escape.js";
+import handleTemplate from "/framework/shared/handle-template.js";
 
 /**
  * A utility for creating a templateable HTMLCollection
