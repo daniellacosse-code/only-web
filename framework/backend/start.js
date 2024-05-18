@@ -20,7 +20,11 @@ export default ({ port = 8080 } = {}) =>
     }
 
     if (requestPath.startsWith("/framework")) {
-      return fetch(Deno.env.get("ONLY_WEB_FRAMEWORK_URL") + requestPath);
+      const frameworkURL =
+        Deno.env.get("ONLY_WEB_FRAMEWORK_URL") ??
+        "https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/main";
+
+      return fetch(frameworkURL + requestPath);
     }
 
     try {
