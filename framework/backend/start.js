@@ -19,6 +19,10 @@ export default ({ port = 8080 } = {}) =>
       }
     }
 
+    if (requestPath.startsWith("/framework")) {
+      // TODO: serve framework files somehow
+    }
+
     try {
       return serveFile(request, resolve(Deno.cwd(), `.${requestPath}`));
     } catch {

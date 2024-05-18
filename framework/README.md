@@ -104,6 +104,9 @@ Backend.Page.Register("/", {
 );
 ```
 
+> [!WARN]
+> In the OnlyWeb Framework, there are reserved routes like `/framework`. You can't register a **Page** at these routes.
+
 2. The default response has no metadata, so external sites won't know how to display it.
    Create an **Inliner** to add some:
 
@@ -162,7 +165,8 @@ import Frontend from "https://raw.githubusercontent.com/daniellacosse-code/onlyw
 Frontend.Element.Register("copy-code", {
   buildAttributes: { copied: Boolean, ["copy-message"]: String, code: String },
   // Note that the html template tag here is different than the Backends'
-  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
+  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend
+    .Element.html`
     <style>
       div {
         display: relative;
@@ -203,7 +207,8 @@ Frontend.Element.Register("copy-code", {
       this.buildAttributes.copied = true;
     });
   },
-  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
+  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend
+    .Element.html`
     <style>
       div {
         display: relative;

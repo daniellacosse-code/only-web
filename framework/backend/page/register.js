@@ -52,6 +52,14 @@ export default (route, options) => {
 
   typedGlobalThis.customPages ??= new Map();
 
+  if (route.startsWith("/framework")) {
+    Shared.Log({
+      message: `[framework/backend/register] Page "${route}" cannot be registered: it is a framework route.`,
+      level: "error"
+    });
+    return;
+  }
+
   if (typedGlobalThis.customPages.has(route))
     Shared.Log({
       message: `[framework/backend/register] Page "${route}" already registered.`,
