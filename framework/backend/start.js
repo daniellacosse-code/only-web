@@ -20,7 +20,7 @@ export default ({ port = 8080 } = {}) =>
     }
 
     if (requestPath.startsWith("/framework")) {
-      // TODO: serve framework files somehow
+      return fetch(Deno.env.get("ONLY_WEB_FRAMEWORK_URL") + requestPath);
     }
 
     try {
