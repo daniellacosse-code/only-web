@@ -2,7 +2,7 @@
 
 import PageResponse from "./response.js";
 import * as constants from "../constants.js";
-import Shared from "/framework/shared/module.js";
+import Shared from "../../shared/module.js";
 
 /**
  * @typedef {import("/framework/shared/user-agent/model.js").PlatformRequirements} PlatformRequirements

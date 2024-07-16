@@ -3,8 +3,8 @@
 import { encode } from "https://deno.land/std@v0.56.0/encoding/base64.ts";
 import * as path from "https://deno.land/std@0.221.0/path/mod.ts";
 
-import Response from "/framework/backend/page/response.js";
-import Shared from "/framework/shared/module.js";
+import Response from "./response.js";
+import Shared from "../../shared/module.js";
 
 /**
  * @typedef {import("./model.js").PageRequest} PageRequest

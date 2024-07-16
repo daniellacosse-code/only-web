@@ -1,5 +1,5 @@
 // @ts-check
-import minify from "/framework/shared/html/minify.js";
+import minify from "./html/minify.js";
 
 const MAX_MESSAGE_LENGTH = 128;
 const MAX_DETAIL_LENGTH = 256;
