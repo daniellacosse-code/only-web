@@ -32,12 +32,9 @@ export default ({ port = resolveConfiguration("ONLY_WEB_SERVER_PORT") } = {}) =>
         resolveConfiguration("ONLY_WEB_FRAMEWORK_SOURCE") +
           "/" +
           resolveConfiguration("ONLY_WEB_FRAMEWORK_BRANCH") +
-          requestPath,
-        {
-          headers: {
-            "content-type": "text/javascript; charset=utf-8"
-          }
-        }
+          requestPath
+      ).then((response) =>
+        response.headers.set("content-type", "text/javascript; charset=utf-8")
       );
     }
 
