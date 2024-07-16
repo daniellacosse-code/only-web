@@ -175,7 +175,7 @@ export default (route, options) => {
                 // launch devtools
                 if (globalThis.location.href.match(/localhost/)) {
                   const reloadSocket = new WebSocket(
-                    "ws://localhost:${constants.DENO_LIVERELOAD_PORT}"
+                    "ws://localhost:${constants.ONLY_WEB_LIVERELOAD_PORT}"
                   );
 
                   reloadSocket.onopen = () =>
