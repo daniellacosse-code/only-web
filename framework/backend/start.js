@@ -35,6 +35,11 @@ export default ({ port = resolveConfiguration("ONLY_WEB_SERVER_PORT") } = {}) =>
           requestPath
       );
 
+      console.log({
+        requestPath,
+        absolutePath
+      });
+
       const headers = new Headers(proxiedResponse.headers);
 
       headers.set("content-type", "text/javascript; charset=utf-8");

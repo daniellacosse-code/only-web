@@ -176,14 +176,19 @@ export default (route, options) => {
 
                 // launch devtools
                 if (globalThis.location.href.match(/localhost/)) {
-                  const reloadSocket = new WebSocket(
-                    "ws://localhost:${LIVERELOAD_PORT}"
-                  );
+                  try {
+                    const reloadSocket = new WebSocket(
+                      "ws://localhost:${LIVERELOAD_PORT}"
+                    );
 
-                  reloadSocket.onopen = () =>
-                    console.log("LiveReload connected~");
-                  reloadSocket.onmessage = ({ data }) =>
-                    data === "reload" && location.reload();
+                    reloadSocket.onopen = () =>
+                      console.log("LiveReload connected~");
+                    reloadSocket.onmessage = ({ data }) =>
+                      data === "reload" && location.reload();
+                  } catch (error) {
+                    // nevermind
+                    console.log("LiveReload failed to connect.");
+                  }
                 }
 
                 // register service worker
@@ -194,6 +199,7 @@ export default (route, options) => {
                     });
                   } catch (error) {
                     // nevermind
+                    console.log("Service worker failed to register.");
                   }
                 }
               })();
