@@ -28,23 +28,21 @@ export default ({ port = resolveConfiguration("ONLY_WEB_SERVER_PORT") } = {}) =>
     const absolutePath = resolve(Deno.cwd(), `.${requestPath}`);
 
     if (requestPath.startsWith("/framework") && !existsSync(absolutePath)) {
-      const response = await fetch(
+      const proxiedResponse = await fetch(
         resolveConfiguration("ONLY_WEB_SOURCE") +
           "/" +
           resolveConfiguration("ONLY_WEB_SOURCE_BRANCH") +
           requestPath
       );
 
-      console.log({
-        requestPath,
-        absolutePath
+      const headers = new Headers(proxiedResponse.headers);
+
+      headers.set("content-type", "text/javascript; charset=utf-8");
+
+      return new Response(proxiedResponse.body, {
+        status: proxiedResponse.status,
+        headers
       });
-
-      response.headers.set("content-type", "text/javascript; charset=utf-8");
-
-      console.log(response.headers.get("content-type"));
-
-      return response;
     }
 
     try {
