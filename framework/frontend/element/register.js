@@ -10,12 +10,12 @@ import html from "/framework/frontend/element/html.js";
  * @param {string} tag The tag of the element
  * @param {object} options The options setting up the element
  * @param {{ [name: string]: function }} [options.buildAttributes] The attributes of the element, that, when modified, will trigger a template build
- * @param {(attributes: object) => HTMLCollection} options.handleBuild The core of the element: use it to build the template from which the shadow DOM will be constructed
- * @param {(attributes: object) => void} [options.handleMount] Is called when the element is mounted: use it to set up the shadow DOM and register event listeners
- * @param {(attributes: object) => void} [options.handleDismount] The dismount handler: use it to clean up event listeners and other resources
+ * @param {(buildAttributes: object) => HTMLCollection} options.handleBuild The core of the element: use it to build the template from which the shadow DOM will be constructed
+ * @param {(buildAttributes: object) => void} [options.handleMount] Is called when the element is mounted: use it to set up the shadow DOM and register event listeners
+ * @param {(buildAttributes: object) => void} [options.handleDismount] The dismount handler: use it to clean up event listeners and other resources
  * @example Register("my-element", {
  *  template: {
- *    attributes: {
+ *    buildAttributes: {
  *      "my-attribute": String,
  *      "my-boolean-attribute": Boolean
  *    },
