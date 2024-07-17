@@ -1,8 +1,10 @@
 // @ts-check
 
 import PageResponse from "./response.js";
-import * as constants from "../constants.js";
 import Shared from "../../shared/module.js";
+
+// TODO: move livereload to repo-agnotic code
+const LIVERELOAD_PORT = 35729;
 
 /**
  * @typedef {import("/framework/shared/user-agent/model.js").PlatformRequirements} PlatformRequirements
@@ -175,7 +177,7 @@ export default (route, options) => {
                 // launch devtools
                 if (globalThis.location.href.match(/localhost/)) {
                   const reloadSocket = new WebSocket(
-                    "ws://localhost:${constants.ONLY_WEB_LIVERELOAD_PORT}"
+                    "ws://localhost:${LIVERELOAD_PORT}"
                   );
 
                   reloadSocket.onopen = () =>

@@ -13,7 +13,7 @@ const resolveConfiguration = (configName) =>
  * @returns {void} Nothing is returned: the server is started.
  */
 export default ({ port = resolveConfiguration("ONLY_WEB_SERVER_PORT") } = {}) =>
-  Deno.serve({ port }, (request) => {
+  Deno.serve({ port }, async (request) => {
     const requestURL = new URL(request.url);
     const requestPath = requestURL.pathname.startsWith("/")
       ? requestURL.pathname
@@ -28,14 +28,23 @@ export default ({ port = resolveConfiguration("ONLY_WEB_SERVER_PORT") } = {}) =>
     const absolutePath = resolve(Deno.cwd(), `.${requestPath}`);
 
     if (requestPath.startsWith("/framework") && !existsSync(absolutePath)) {
-      return fetch(
-        resolveConfiguration("ONLY_WEB_FRAMEWORK_SOURCE") +
+      const response = await fetch(
+        resolveConfiguration("ONLY_WEB_SOURCE") +
           "/" +
-          resolveConfiguration("ONLY_WEB_FRAMEWORK_BRANCH") +
+          resolveConfiguration("ONLY_WEB_SOURCE_BRANCH") +
           requestPath
-      ).then((response) =>
-        response.headers.set("content-type", "text/javascript; charset=utf-8")
       );
+
+      console.log({
+        requestPath,
+        absolutePath
+      });
+
+      response.headers.set("content-type", "text/javascript; charset=utf-8");
+
+      console.log(response.headers.get("content-type"));
+
+      return response;
     }
 
     try {
