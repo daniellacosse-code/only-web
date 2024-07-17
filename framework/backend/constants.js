@@ -1,2 +1,4 @@
-export const DENO_PORT = 8000;
-export const DENO_LIVERELOAD_PORT = 35729;
+export const ONLY_WEB_SOURCE =
+  "https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev";
+export const ONLY_WEB_SOURCE_BRANCH = "main";
+export const ONLY_WEB_SERVER_PORT = 8000;

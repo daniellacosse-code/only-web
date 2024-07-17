@@ -154,15 +154,16 @@ Backend.Page.Register("/", {
 });
 ```
 
-4. We want to be able to easily copy our search string to the clipboard. We'll have to create a new frontend **Element** to do this. Here's that initial file:
+4. We want to be able to easily copy our search string to the clipboard. We'll have to create a new frontend **Element** to do this. Here's that initial file. Note how we're now importing via the root path:
 
 ```js
-import Frontend from "https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/main/framework/frontend/module.js";
+import Frontend from "/framework/frontend/module.js";
 
 Frontend.Element.Register("copy-code", {
   buildAttributes: { copied: Boolean, ["copy-message"]: String, code: String },
   // Note that the html template tag here is different than the Backends'
-  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
+  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend
+    .Element.html`
     <style>
       div {
         display: relative;
@@ -203,7 +204,8 @@ Frontend.Element.Register("copy-code", {
       this.buildAttributes.copied = true;
     });
   },
-  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend.Element.html`
+  handleBuild: ({ code, copied, ["copy-message"]: copyMessage }) => Frontend
+    .Element.html`
     <style>
       div {
         display: relative;

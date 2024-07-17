@@ -1,8 +1,10 @@
 // @ts-check
 
 import PageResponse from "./response.js";
-import * as constants from "../constants.js";
-import Shared from "/framework/shared/module.js";
+import Shared from "../../shared/module.js";
+
+// TODO: move livereload to repo-agnotic code
+const LIVERELOAD_PORT = 35729;
 
 /**
  * @typedef {import("/framework/shared/user-agent/model.js").PlatformRequirements} PlatformRequirements
@@ -51,6 +53,14 @@ export default (route, options) => {
   const typedGlobalThis = globalThis;
 
   typedGlobalThis.customPages ??= new Map();
+
+  if (route.startsWith("/framework")) {
+    Shared.Log({
+      message: `[framework/backend/register] Page "${route}" cannot be registered: it is a framework route.`,
+      level: "error"
+    });
+    return;
+  }
 
   if (typedGlobalThis.customPages.has(route))
     Shared.Log({
@@ -166,14 +176,19 @@ export default (route, options) => {
 
                 // launch devtools
                 if (globalThis.location.href.match(/localhost/)) {
-                  const reloadSocket = new WebSocket(
-                    "ws://localhost:${constants.DENO_LIVERELOAD_PORT}"
-                  );
+                  try {
+                    const reloadSocket = new WebSocket(
+                      "ws://localhost:${LIVERELOAD_PORT}"
+                    );
 
-                  reloadSocket.onopen = () =>
-                    console.log("LiveReload connected~");
-                  reloadSocket.onmessage = ({ data }) =>
-                    data === "reload" && location.reload();
+                    reloadSocket.onopen = () =>
+                      console.log("LiveReload connected~");
+                    reloadSocket.onmessage = ({ data }) =>
+                      data === "reload" && location.reload();
+                  } catch (error) {
+                    // nevermind
+                    console.log("LiveReload failed to connect.");
+                  }
                 }
 
                 // register service worker
@@ -184,6 +199,7 @@ export default (route, options) => {
                     });
                   } catch (error) {
                     // nevermind
+                    console.log("Service worker failed to register.");
                   }
                 }
               })();

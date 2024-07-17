@@ -1,5 +1,6 @@
-const DENO_LIVERELOAD_PORT = 35729;
-const DENO_LIVERELOAD_DELAY = 1000;
+// TODO: move livereload into repo-agnostic code
+const LIVERELOAD_PORT = 35729;
+const LIVERELOAD_DELAY = 1000;
 
 let server, reloadInProgress, reloadSocket;
 
@@ -23,7 +24,7 @@ for await (const _ of Deno.watchFs([
     } catch (_) {
       // do nothing
     }
-  }, DENO_LIVERELOAD_DELAY);
+  }, LIVERELOAD_DELAY);
 }
 
 async function startOrReloadAppServer() {
@@ -53,13 +54,13 @@ async function startOrReloadAppServer() {
 function startLiveReloadServer() {
   Deno.serve(
     {
-      port: DENO_LIVERELOAD_PORT,
+      port: LIVERELOAD_PORT,
       handler: (request) => {
         if (request.headers.get("upgrade") !== "websocket") {
           return new Response("Not a websocket upgrade request", { code: 400 });
         }
       }
     },
-    DENO_LIVERELOAD_DELAY
+    LIVERELOAD_DELAY
   );
 }
