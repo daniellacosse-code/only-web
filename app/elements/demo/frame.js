@@ -28,7 +28,7 @@ Frontend.Element.Register("demo-frame", {
         width: 100%;
       }
 
-      .container {
+      .frame-container {
         position: relative;
       }
 
@@ -39,27 +39,38 @@ Frontend.Element.Register("demo-frame", {
       }
 
       core-loading-skeleton {
-        /* TODO: Remove this once the loading skeleton border radius is directly editable */
-        --size-narrow: 0;
+        --core-loading-skeleton-border-radius: 0;
 
         display: inline-block;
         height: ${height}px;
         left: 0;
-        opacity: 1;
         position: absolute;
         top: 0;
-        transition: opacity 350ms ease;
         width: 100%;
       }
 
       core-loading-skeleton.loaded {
-        opacity: 0;
+        animation-duration: var(--animation-duration-fast);
+        animation-fill-mode: forwards;
+        animation-name: disappear;
+        animation-timing-function: var(--animation-timing-function);
+      }
+
+      @keyframes disappear {
+        0% {
+          opacity: 1;
+          display: inline-block;
+        }
+        100% {
+          opacity: 0;
+          display: none;
+        }
       }
     </style>
     <header>
       <core-text type="subtitle">${title}</core-text>
     </header>
-    <div class="container">
+    <div class="frame-container">
       <iframe src="${src}" title="${title}" loading="lazy"></iframe>
       <core-loading-skeleton></core-loading-skeleton>
     </div>`;

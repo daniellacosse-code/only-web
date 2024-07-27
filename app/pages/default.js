@@ -176,7 +176,11 @@ Backend.Page.Register(route, {
             >
           </section>
           <section>
-            <demo-frame id="chord-reader" title="Audio: Chord Reader" src="https://codepen.io/daniellacosse/full/VwMQEOz" /></demo-frame>
+            <demo-frame id="chord-reader"
+              title="Audio: Chord Reader"
+              src="https://codepen.io/daniellacosse/full/VwMQEOz"
+              height=800
+            ></demo-frame>
           </section>
         </article>
       </main>
