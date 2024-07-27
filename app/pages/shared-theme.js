@@ -26,6 +26,9 @@ export default Backend.Page.Response.html`<style>
     --animation-duration: ${constants.THEME_ANIMATION_DURATION};
     --animation-duration-fast: ${constants.THEME_ANIMATION_DURATION_FAST};
     --animation-timing-function: ${constants.THEME_ANIMATION_TIMING_FUNCTION};
+
+    /* core elements */
+    --core-loading-skeleton-border-radius: var(--size-narrow);
   }
 
   ::selection {

@@ -7,7 +7,7 @@ Frontend.Element.Register(
       display: block;
       width: 100%;
       height: 100%;
-      border-radius: var(--size-narrow);
+      border-radius: var(--core-loading-skeleton-border-radius);
       background: linear-gradient(
         90deg,
         var(--color-neutral-transparent) 0%,

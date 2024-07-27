@@ -36,7 +36,8 @@ Backend.Page.Register(route, {
         "/app/elements/core/image.js",
         "/app/elements/core/link.js",
         "/app/elements/core/text.js",
-        "/app/elements/core/input.js"
+        "/app/elements/core/input.js",
+        "/app/elements/demo/frame.js"
       )}
 
       <meta
@@ -47,7 +48,6 @@ Backend.Page.Register(route, {
 
       <style>
         main {
-          align-items: center;
           display: flex;
           flex-direction: row;
           min-height: 100svh;
@@ -56,6 +56,8 @@ Backend.Page.Register(route, {
 
         nav {
           background: var(--color-foreground);
+          position: sticky;
+          top: 0;
           display: flex;
           flex-direction: column;
           flex-shrink: 0;
@@ -65,6 +67,7 @@ Backend.Page.Register(route, {
           transform: translateX(0%);
           transition: transform var(--animation-duration) var(--animation-timing-function);
           will-change: transform;
+          z-index: 1;
         }
 
         nav header {
@@ -103,6 +106,7 @@ Backend.Page.Register(route, {
           cursor: pointer;
           cursor: pointer;
           display: block;
+          font-family: system-ui;
           padding: var(--size-narrow);
           text-align: right;
           transition: background-color var(--animation-duration-fast) var(--animation-timing-function);
@@ -171,15 +175,20 @@ Backend.Page.Register(route, {
               >${inliner.message("Follow along")}</core-link
             >
           </section>
+          <section>
+            <demo-frame id="chord-reader"
+              title="Audio: Chord Reader"
+              src="https://codepen.io/daniellacosse/full/VwMQEOz"
+              height=800
+            ></demo-frame>
+          </section>
         </article>
       </main>
       <script type="module">
         import Frontend from "/framework/frontend/module.js";
 
         const sidebarMenuContents = [
-          // { content: "Part #1", href: "#part-1" },
-          // { content: "Section #2", href: "#section-2" },
-          // { content: "Appendix #3", href: "#appendix-3" }
+          { content: "Audio: Chord Reader", href: "#chord-reader" }
         ];
 
         const sidebarSearchElement = globalThis.document.getElementById("search");
