@@ -10,7 +10,7 @@
   },
   "versionlens.suggestions.showOnStartup": true,
   "workbench.colorCustomizations": {
-    "statusBar.background": "#42b983",
+    "statusBar.background": "#313335",
     "statusBar.foreground": "#FFFFFF"
   }
 }

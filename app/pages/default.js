@@ -15,6 +15,12 @@ Backend.Page.Register(route, {
         : constants.KEYCDN_IMAGE_ZONE_URL) +
       "/app/assets/images/logo/black.svg";
 
+    const inverseLogoSrc =
+      (request.url.origin.match(/localhost/)
+        ? request.url.origin
+        : constants.KEYCDN_IMAGE_ZONE_URL) +
+      "/app/assets/images/logo/white.svg";
+
     return Backend.Page.Response.html`<head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,7 +43,8 @@ Backend.Page.Register(route, {
         "/app/elements/core/link.js",
         "/app/elements/core/text.js",
         "/app/elements/core/input.js",
-        "/app/elements/demo/frame.js"
+        "/app/elements/demo/frame.js",
+        "/app/elements/demo/link.js"
       )}
 
       <meta
@@ -75,8 +82,8 @@ Backend.Page.Register(route, {
         }
 
         nav header core-text {
-          --color-foreground: var(--color-background);
-          --size-text-title: 1.5rem;
+          --core-text-color-title: var(--color-background);
+          --core-text-size-title: 1.5rem;
           flex-shrink: 0;
           white-space: nowrap;
         }
@@ -104,7 +111,6 @@ Backend.Page.Register(route, {
         nav ul li a {
           all: initial;
           cursor: pointer;
-          cursor: pointer;
           display: block;
           font-family: system-ui;
           padding: var(--size-narrow);
@@ -123,7 +129,6 @@ Backend.Page.Register(route, {
           color: var(--color-background);
           flex-grow: 1;
           padding: var(--size-large);
-          text-align: center;
           will-change: width;
         }
 
@@ -161,34 +166,72 @@ Backend.Page.Register(route, {
       </nav>
         <article>
           <section>
-            <core-text type="subtitle"
-              >${inliner.message("Please pardon our dust.")}</core-text
-            >
+            <div style="display:flex;align-items:center;gap:3px;">
+              <core-image src="${inverseLogoSrc}" alt="logo" width="96px" height="96px"></core-image>
+              <core-text type="title">nly Web</core-text>
+            </div>
           </section>
           <section>
-            <core-text 
-              >${inliner.message(
-                "We're currently rebuilding literally everything."
-              )}</core-text
+            <core-text type="paragraph">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </core-text>
+          </section>
+          <section>
+            <demo-link id="synthesizer"
+              title="Audio: Synthesizer ↗️"
+              author="Ableton"
+              src="https://learningsynths.ableton.com/en/playground"
             >
-            <core-link href="https://DanielLaCos.se/"
-              >${inliner.message("Follow along")}</core-link
-            >
+              <core-text>
+                Laboriosam qui vel minus id voluptatem est. Qui consectetur magnam pariatur dolorum. Non in fugiat quo.
+              </core-text>
+            </demo-link>
           </section>
           <section>
             <demo-frame id="chord-reader"
               title="Audio: Chord Reader"
               src="https://codepen.io/daniellacosse/full/VwMQEOz"
-              height=800
-            ></demo-frame>
+              height=600
+            >
+              <core-text>
+              Natus corporis ut voluptatem itaque. Ut eos rerum autem odit. Magni quo rem explicabo delectus consectetur voluptatem.
+              </core-text>
+            </demo-frame>
           </section>
+          <section>
+            <demo-frame id="diablo"
+              title="Web Assembly: Diablo"
+              src="https://d07riv.github.io/diabloweb/"
+              height=650
+              author="d07riv"
+            >
+              <core-text>
+                This is the original Diablo game, compiled to Web Assembly.  Optio minima cumque autem molestias. Nulla optio cumque rerum ea neque laboriosam laudantium. Dolores voluptate aperiam quis quo magnam est natus ut.
+              </core-text>
+            </demo-frame>
+          </section>
+          <section>
+            <demo-frame id="frustrum-culling"
+              title="WebGPU: Frustrum Culling"
+              src="https://toji.github.io/webgpu-bundle-culling/"
+              author="toji"  
+            >
+              <core-text>
+                Frustrum culling is a technique used in 3D graphics to only render what the camera can see.
+                This demo uses WebGPU to render a scene with a large number of objects.
+                Nulla aliquam minima possimus unde deleniti placeat. Sit voluptatem et aliquid totam. Et assumenda et illo fugiat ut laborum eius exercitationem. Libero deserunt officiis et doloribus ab.
+              </core-text>
+            </demo-frame>
         </article>
       </main>
       <script type="module">
         import Frontend from "/framework/frontend/module.js";
 
         const sidebarMenuContents = [
-          { content: "Audio: Chord Reader", href: "#chord-reader" }
+          { content: "Audio: Synthesizer", href: "#synthesizer" },
+          { content: "Audio: Chord Reader", href: "#chord-reader" },
+          { content: "Web Assembly: Diablo", href: "#diablo" },
+          { content: "WebGPU: Frustrum Culling", href: "#frustrum-culling" }
         ];
 
         const sidebarSearchElement = globalThis.document.getElementById("search");

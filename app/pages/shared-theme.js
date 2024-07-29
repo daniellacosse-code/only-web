@@ -28,7 +28,19 @@ export default Backend.Page.Response.html`<style>
     --animation-timing-function: ${constants.THEME_ANIMATION_TIMING_FUNCTION};
 
     /* core elements */
+    --core-text-color-title: var(--color-foreground);
+    --core-text-size-title: var(--size-text-title);
+
+    --core-text-color-subtitle: var(--color-neutral);
+    --core-text-size-subtitle: var(--size-text-subtitle);
+
+    --core-text-color-paragraph: var(--color-foreground);
+    --core-text-size-paragraph: var(--size-text-paragraph);
+
     --core-loading-skeleton-border-radius: var(--size-narrow);
+
+    --core-link-color: var(--color-foreground);
+    --core-link-hover-color: var(--color-background);
   }
 
   ::selection {
