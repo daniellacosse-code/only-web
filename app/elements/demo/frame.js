@@ -7,7 +7,8 @@ Frontend.Element.Register("demo-frame", {
   buildAttributes: {
     height: Number,
     src: String,
-    title: String
+    title: String,
+    author: String
   },
   handleMount() {
     requestAnimationFrame(() => {
@@ -16,15 +17,13 @@ Frontend.Element.Register("demo-frame", {
       });
     });
   },
-  handleBuild({ src, title = "Demo Frame", height = 500 }) {
+  handleBuild({ author = "", height = 500, src, title = "Demo Frame" }) {
     return Frontend.Element.html`<style>
       :host {
-        align-items: left;
         display: flex;
         flex-direction: column;
         gap: var(--size-narrow);
         height: 100%;
-        justify-content: center;
         width: 100%;
       }
 
@@ -66,13 +65,22 @@ Frontend.Element.Register("demo-frame", {
           display: none;
         }
       }
+
+      .author {
+        font-style: italic;
+        opacity: 0.5;
+      }
     </style>
-    <header>
-      <core-text type="subtitle">${title}</core-text>
-    </header>
+    <core-text type="subtitle">${title}</core-text>
+    <slot></slot>
     <div class="frame-container">
       <iframe src="${src}" title="${title}" loading="lazy"></iframe>
       <core-loading-skeleton></core-loading-skeleton>
+      ${
+        author &&
+        Frontend.Element
+          .html`<core-text class="author">Author: ${author}</core-text>`
+      }
     </div>`;
   }
 });

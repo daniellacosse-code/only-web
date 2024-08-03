@@ -15,6 +15,12 @@ Backend.Page.Register(route, {
         : constants.KEYCDN_IMAGE_ZONE_URL) +
       "/app/assets/images/logo/black.svg";
 
+    const inverseLogoSrc =
+      (request.url.origin.match(/localhost/)
+        ? request.url.origin
+        : constants.KEYCDN_IMAGE_ZONE_URL) +
+      "/app/assets/images/logo/white.svg";
+
     return Backend.Page.Response.html`<head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,7 +43,8 @@ Backend.Page.Register(route, {
         "/app/elements/core/link.js",
         "/app/elements/core/text.js",
         "/app/elements/core/input.js",
-        "/app/elements/demo/frame.js"
+        "/app/elements/demo/frame.js",
+        "/app/elements/demo/link.js"
       )}
 
       <meta
@@ -75,8 +82,8 @@ Backend.Page.Register(route, {
         }
 
         nav header core-text {
-          --color-foreground: var(--color-background);
-          --size-text-title: 1.5rem;
+          --core-text-color-title: var(--color-background);
+          --core-text-size-title: 1.5rem;
           flex-shrink: 0;
           white-space: nowrap;
         }
@@ -104,7 +111,6 @@ Backend.Page.Register(route, {
         nav ul li a {
           all: initial;
           cursor: pointer;
-          cursor: pointer;
           display: block;
           font-family: system-ui;
           padding: var(--size-narrow);
@@ -123,7 +129,6 @@ Backend.Page.Register(route, {
           color: var(--color-background);
           flex-grow: 1;
           padding: var(--size-large);
-          text-align: center;
           will-change: width;
         }
 
@@ -132,6 +137,10 @@ Backend.Page.Register(route, {
           flex-direction: column;
           gap: var(--size-narrow);
           margin: var(--size-huge) 0;
+        }
+
+        hr { 
+          width: 100%;
         }
 
         @media screen and (max-width: 768px) {
@@ -161,34 +170,73 @@ Backend.Page.Register(route, {
       </nav>
         <article>
           <section>
-            <core-text type="subtitle"
-              >${inliner.message("Please pardon our dust.")}</core-text
-            >
+            <div style="display:flex;align-items:center;gap:3px;">
+              <core-image src="${inverseLogoSrc}" alt="logo" width="96px" height="96px"></core-image>
+              <core-text type="title">nly web</core-text>
+            </div>
+            <core-text type="paragraph">
+              <b>Discover the potential of only web.</b>
+              Explore cutting-edge capabilities, challenging the need for a native app for every experience.
+              <i>Get ready to rethink what's possible online.</i>
+            </core-text>
           </section>
           <section>
-            <core-text 
-              >${inliner.message(
-                "We're currently rebuilding literally everything."
-              )}</core-text
+            <hr />
+          </section>
+          <section>
+            <demo-link id="synthesizer"
+              title="Audio: Synthesizer ↗️"
+              author="Ableton"
+              src="https://learningsynths.ableton.com/en/playground"
             >
-            <core-link href="https://DanielLaCos.se/"
-              >${inliner.message("Follow along")}</core-link
-            >
+              <core-text>
+                <b>Unleash your inner musician with Ableton's web-based synthesizer.</b> Dive deep into sound creation with multiple oscillators, filters, and envelopes at your fingertips. Compose melodies using your keyboard, and then download your masterpiece to share with the world.
+              </core-text>
+            </demo-link>
           </section>
           <section>
             <demo-frame id="chord-reader"
-              title="Audio: Chord Reader"
+              title="Audio: Chord Reader Prototype"
               src="https://codepen.io/daniellacosse/full/VwMQEOz"
-              height=800
-            ></demo-frame>
+              height=600
+            >
+              <core-text>
+                <b>Uncover the magic behind your favorite tunes with our interactive chord progression tool.</b> Simply input your desired chord sequence and hear how it sounds. It's the perfect way to experiment with different chord combinations, understand music structure, and even start creating your own compositions.
+              </core-text>
+            </demo-frame>
           </section>
+          <section>
+            <demo-frame id="diablo"
+              title="Web Assembly: Diablo"
+              src="https://d07riv.github.io/diabloweb/"
+              height=650
+              author="d07riv"
+            >
+              <core-text>
+                <b>Relive the classic dungeon-crawling experience, now in your browser.</b> GalaXyHaXz and the devilution team has brought the original Diablo to the web using WebAssembly, a groundbreaking technology that enables high-performance applications to run directly in your website. Prepare to slay demons and collect loot, all without leaving your web browser.
+              </core-text>
+            </demo-frame>
+          </section>
+          <section>
+            <demo-frame id="frustrum-culling"
+              title="WebGPU: Frustrum Culling"
+              src="https://toji.github.io/webgpu-bundle-culling/"
+              author="toji"  
+            >
+              <core-text>
+                <b>Explore a complex 3D scene containing thousands of objects,</b> optimized with advanced techniques like frustum culling and accelerated by WebGPU. Watch as the visible objects dynamically change as you navigate.
+              </core-text>
+            </demo-frame>
         </article>
       </main>
       <script type="module">
         import Frontend from "/framework/frontend/module.js";
 
         const sidebarMenuContents = [
-          { content: "Audio: Chord Reader", href: "#chord-reader" }
+          { content: "Audio: Synthesizer", href: "#synthesizer" },
+          { content: "Audio: Chord Reader", href: "#chord-reader" },
+          { content: "Web Assembly: Diablo", href: "#diablo" },
+          { content: "WebGPU: Frustrum Culling", href: "#frustrum-culling" }
         ];
 
         const sidebarSearchElement = globalThis.document.getElementById("search");
