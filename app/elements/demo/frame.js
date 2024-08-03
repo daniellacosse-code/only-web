@@ -17,7 +17,7 @@ Frontend.Element.Register("demo-frame", {
       });
     });
   },
-  handleBuild({ author, height = 500, src, title = "Demo Frame" }) {
+  handleBuild({ author = "", height = 500, src, title = "Demo Frame" }) {
     return Frontend.Element.html`<style>
       :host {
         display: flex;
