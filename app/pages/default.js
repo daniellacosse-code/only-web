@@ -126,7 +126,7 @@ Backend.Page.Register(route, {
 
         article {
           box-sizing: border-box;
-          color: var(--color-background);
+          color: var(--color-foreground);
           flex-grow: 1;
           padding: var(--size-large);
           will-change: width;
