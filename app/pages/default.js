@@ -99,7 +99,6 @@ Backend.Page.Register(route, {
 
         nav ul {
           all: initial;
-          font-family: system-ui;
           flex-grow: 1;
           margin-top: var(--size-default);
         }
@@ -126,7 +125,6 @@ Backend.Page.Register(route, {
 
         article {
           box-sizing: border-box;
-          color: var(--color-foreground);
           flex-grow: 1;
           padding: var(--size-large);
           will-change: width;
@@ -137,6 +135,16 @@ Backend.Page.Register(route, {
           flex-direction: column;
           gap: var(--size-narrow);
           margin: var(--size-huge) 0;
+        }
+
+        article section header {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+        }
+
+        article section header core-text {
+          white-space: nowrap;
         }
 
         hr { 
@@ -154,14 +162,43 @@ Backend.Page.Register(route, {
             transform: translateX(0%);
           }
         }
+
+        /**
+          * we must approximate the final styles for the page while the 
+          * framework loads to improve cumulative layout shift (CLS) - not great 
+          */
+
+        /* TODO(#209): systematically improve CLS so these classes can be deleted  */
+        nav header core-image.__bootstrap-cls__ {
+          height: 64px;
+          width: 64px;
+          display: inline-block;
+        }
+
+        article.__bootstrap-cls__ {
+          color: var(--color-foreground);
+        }
+
+        article header core-image.__bootstrap-cls__ {
+          width: 96px;
+          height: 96px;
+        }
+
+        nav header core-text.__bootstrap-cls__,
+        article header core-text.__bootstrap-cls__ {
+          font-weight: bold;
+          font-family: var(--core-text-size-title);
+        }
       </style>
     </head>
     <body>
       <main>
       <nav>
         <header>
-          <core-image src="${logoSrc}" alt="logo" width="64px" height="64px"></core-image>
-          <core-text type="title">${inliner.message("only web 2")}</core-text>
+          <core-image class="__bootstrap-cls__" src="${logoSrc}" alt="logo" width="64px" height="64px"></core-image>
+          <core-text class="__bootstrap-cls__" type="title" style="font-weight: bold; font-size: 1.5rem;">${inliner.message(
+            "only web 2"
+          )}</core-text>
         </header>
         <div class="input-wrapper">
           <core-input id="search" type="search" label="Search..."></core-input>
@@ -170,10 +207,10 @@ Backend.Page.Register(route, {
       </nav>
         <article>
           <section>
-            <div style="display:flex;align-items:center;gap:3px;">
-              <core-image src="${inverseLogoSrc}" alt="logo" width="96px" height="96px"></core-image>
-              <core-text type="title">nly web</core-text>
-            </div>
+            <header>
+              <core-image class="__bootstrap-cls__" src="${inverseLogoSrc}" alt="logo" width="96px" height="96px"></core-image>
+              <core-text class="__bootstrap-cls__" type="title">nly web</core-text>
+            </header>
             <core-text type="paragraph">
               <b>Discover the potential of only web.</b>
               Explore cutting-edge capabilities, challenging the need for a native app for every experience.
@@ -221,7 +258,7 @@ Backend.Page.Register(route, {
             <demo-frame id="frustrum-culling"
               title="WebGPU: Frustrum Culling"
               src="https://toji.github.io/webgpu-bundle-culling/"
-              author="toji"  
+              author="toji"
             >
               <core-text>
                 <b>Explore a complex 3D scene containing thousands of objects,</b> optimized with advanced techniques like frustum culling and accelerated by WebGPU. Watch as the visible objects dynamically change as you navigate.

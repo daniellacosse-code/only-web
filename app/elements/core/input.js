@@ -59,9 +59,9 @@ Frontend.Element.Register("core-input", {
     label: String,
     type: String
   },
-  handleMount({ label = "" }) {
+  handleMount({ label = "", type }) {
     this.setAttribute("tabIndex", 0);
-    this.setAttribute("role", "input");
+    this.setAttribute("role", type === "search" ? "searchbox" : "textbox");
 
     const __inputID__ = makeLabelID(label);
 
