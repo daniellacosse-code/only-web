@@ -9,6 +9,7 @@ Frontend.Element.Register("core-link", {
       a {
         display: inline-block;
       }
+
       a,
       a::selection {
         cursor: ne-resize;
