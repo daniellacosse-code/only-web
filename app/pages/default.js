@@ -234,7 +234,7 @@ Backend.Page.Register(route, {
           <section>
             <demo-frame id="chord-reader"
               title="Audio: Chord Reader Prototype"
-              src="https://codepen.io/daniellacosse/full/VwMQEOz"
+              src="/demos/music"
               height=600
             >
               <core-text>
