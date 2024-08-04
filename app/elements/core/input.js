@@ -61,7 +61,6 @@ Frontend.Element.Register("core-input", {
   },
   handleMount({ label = "", type }) {
     this.setAttribute("tabIndex", 0);
-    this.setAttribute("role", type === "search" ? "searchbox" : "textbox");
 
     const __inputID__ = makeLabelID(label);
 
@@ -90,8 +89,12 @@ Frontend.Element.Register("core-input", {
       case "password":
       case "email":
       case "search":
-        inputElement = Frontend.Element
-          .html`<input id="${__inputID__}" type="${type}">`;
+        inputElement = Frontend.Element.html`
+          <input id="${__inputID__}"
+            type="${type}" 
+            aria-labelledby="${__inputID__}-label" 
+            role="${type}box"
+          >`;
         break;
       case "content":
       default:
@@ -102,13 +105,17 @@ Frontend.Element.Register("core-input", {
               i { font-style: italic; }
               u { text-decoration: underline; }
             </style>
-            <div id="${__inputID__}" contenteditable="true"></div>`;
+            <div id="${__inputID__}"
+              contenteditable="true"
+              aria-labelledby="${__inputID__}-label" 
+              role="textbox"
+            ></div>`;
     }
 
     return Frontend.Element.html`
         ${sharedStyles}
         <div class="wrapper">
-          <label for="${__inputID__}">${label}</label>
+          <label id="${__inputID__}-label">${label}</label>
           ${inputElement}
         </div>`;
   }

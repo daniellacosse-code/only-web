@@ -34,7 +34,7 @@ Frontend.Element.Register("demo-frame", {
       iframe {
         width: 100%;
         height: ${height}px;
-        border: none;
+        border: 1px solid var(--color-foreground);
       }
 
       core-loading-skeleton {
