@@ -213,6 +213,7 @@ Backend.Page.Register(route, {
               <core-text class="__bootstrap-cls__" type="title">nly web</core-text>
             </header>
             <core-text type="paragraph">
+              <i>[pre-alpha]</i><br/><br/>
               <b>Discover the potential of only web.</b>
               Explore cutting-edge capabilities, challenging the need for a native app for every experience.
               <i>Get ready to rethink what's possible online.</i>
@@ -240,6 +241,15 @@ Backend.Page.Register(route, {
             >
               <core-text>
                 <b>Uncover the magic behind your favorite tunes with our interactive chord progression tool.</b> Simply input your desired chord sequence and hear how it sounds. It's the perfect way to experiment with different chord combinations, understand music structure, and even start creating your own compositions.
+              </core-text>
+            </demo-frame>
+          </section>
+          <section>
+            <demo-frame id="sql"
+              title="Web Assembly: SQL"
+              src="https://sqlime.org/">
+              <core-text>
+                <b>Experience the power of SQL in-browser.</b> SQLime is a web-based SQL IDE that runs entirely in your browser, powered by WebAssembly. Write queries, visualize results, and learn SQL concepts.
               </core-text>
             </demo-frame>
           </section>
@@ -273,6 +283,7 @@ Backend.Page.Register(route, {
         const sidebarMenuContents = [
           { content: "Audio: Synthesizer", href: "#synthesizer" },
           { content: "Audio: Chord Reader", href: "#chord-reader" },
+          { content: "Web Assembly: SQL", href: "#sql" },
           { content: "Web Assembly: Diablo", href: "#diablo" },
           { content: "WebGPU: Frustrum Culling", href: "#frustrum-culling" }
         ];
