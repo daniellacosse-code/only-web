@@ -97,8 +97,10 @@ export default (tag, options) => {
           level: "debug"
         });
 
-        this.#handleMount(this.buildAttributes ?? {});
         this.#buildTemplate();
+        requestAnimationFrame(() =>
+          this.#handleMount(this.buildAttributes ?? {})
+        );
       }
 
       /**
