@@ -66,9 +66,9 @@ export default (tag, options) => {
         this.#handleTemplateBuild = handleBuild.bind(this);
         this.#handleDismount = handleDismount.bind(this);
 
-        /** @type {ShadowRoot & { buildAttributes?: {} }} */
+        /** @type {ShadowRoot} */
         this.template = this.attachShadow({ mode: "open" });
-        this.template.buildAttributes = new Proxy(
+        this.buildAttributes = new Proxy(
           {},
           {
             deleteProperty: (_, name) => {
@@ -97,7 +97,7 @@ export default (tag, options) => {
           level: "debug"
         });
 
-        this.#handleMount(this.template.buildAttributes ?? {});
+        this.#handleMount(this.buildAttributes ?? {});
         this.#buildTemplate();
       }
 
@@ -122,7 +122,7 @@ export default (tag, options) => {
           level: "debug"
         });
 
-        this.#handleDismount(this.template.buildAttributes ?? {});
+        this.#handleDismount(this.buildAttributes ?? {});
 
         this.#eventController.abort();
       }
@@ -196,7 +196,7 @@ export default (tag, options) => {
         });
 
         const templateResult =
-          this.#handleTemplateBuild(this.template.buildAttributes ?? {}) ??
+          this.#handleTemplateBuild(this.buildAttributes ?? {}) ??
           html`<slot></slot>`;
         const templateWrapper = html`<template>
           <style>
