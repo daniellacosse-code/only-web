@@ -247,9 +247,10 @@ Backend.Page.Register(route, {
           <section>
             <demo-frame id="sql"
               title="Web Assembly: SQL"
-              src="https://sqlime.org/">
+              src="https://sqlime.org/"
+              author="nalgeon">
               <core-text>
-                <b>Experience the power of SQL in-browser.</b> SQLime is a web-based SQL IDE that runs entirely in your browser, powered by WebAssembly. Write queries, visualize results, and learn SQL concepts.
+                <b>Experience the power of SQL in-browser.</b> SQLime is a web-based SQL IDE that runs entirely in your browser, powered by WebAssembly-compiled SQLite. Write queries, visualize results, and learn SQL concepts in-place.
               </core-text>
             </demo-frame>
           </section>
@@ -272,7 +273,7 @@ Backend.Page.Register(route, {
               author="toji"
             >
               <core-text>
-                <b>Explore a complex 3D scene containing thousands of objects,</b> optimized with advanced techniques like frustum culling and accelerated by WebGPU. Watch as the visible objects dynamically change as you navigate.
+                <b>Explore a complex 3D scene containing thousands of objects,</b> optimized with frustum culling: watch as the visible objects dynamically change as you navigate.
               </core-text>
             </demo-frame>
         </article>
