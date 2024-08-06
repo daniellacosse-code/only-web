@@ -10,6 +10,7 @@ Backend.Page.Register("/demos/music", {
           }
 
           body {
+            all: initial;
             background: #eee;
             font-family: system-ui;
             padding-bottom: 10rem;
@@ -58,6 +59,7 @@ Backend.Page.Register("/demos/music", {
           }
 
           ol {
+            all: initial;
             display: flex;
             justify-content: space-around;
             min-width: 320px;
@@ -65,6 +67,7 @@ Backend.Page.Register("/demos/music", {
           }
 
           ol > li {
+            all: initial;
             color: blue;
             font-size: 3rem;
           }
@@ -88,26 +91,33 @@ Backend.Page.Register("/demos/music", {
           }
 
           h1 {
+            all: initial;
             display: inline;
             font-size: 1.25rem;
+            font-family: system-ui;
           }
 
           h2 {
+            all: initial;
             font-weight: bold;
+            font-family: system-ui;
           }
 
           section {
             margin: 0.5rem 0;
+            font-family: system-ui;
           }
 
           ul {
             margin: 0.25rem 0;
             margin-left: 2rem;
+            font-family: system-ui;
           }
 
           ul > li {
             list-style-type: disc;
             line-height: 1.25;
+            font-family: system-ui;
           }
         </style>
       </head>
@@ -207,7 +217,7 @@ Backend.Page.Register("/demos/music", {
             const MS_PER_MINUTE = 60000;
 
             const bpmMs = MS_PER_MINUTE / bpmInput.value;
-            const chordStrings = chordsInput.value.split(/\s+/).reverse();
+            const chordStrings = chordsInput.value.split(/\\s+/).reverse();
             const updateHighlightedChord = chordsInputSelectionUpdaterFactory(
               chordsInput
             );
