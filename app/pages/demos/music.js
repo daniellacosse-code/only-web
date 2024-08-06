@@ -70,6 +70,7 @@ Backend.Page.Register("/demos/music", {
             all: initial;
             color: blue;
             font-size: 3rem;
+            font-family: system-ui;
           }
 
           i {
@@ -345,7 +346,7 @@ Backend.Page.Register("/demos/music", {
 
             if (symbol.match(/dim|m7b5/)) {
               shape = [0, 3, 6, 12];
-            } else if (symbol.match("aug") || symbol.match("+")) {
+            } else if (symbol.match(/aug|\\+/)) {
               shape = [0, 4, 8, 12];
             } else if (
               symbol.toLowerCase() === symbol ||
