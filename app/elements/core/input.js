@@ -59,26 +59,6 @@ Frontend.Element.Register("core-input", {
     label: String,
     type: String
   },
-  handleMount({ label = "", type }) {
-    this.setAttribute("tabIndex", 0);
-
-    const __inputID__ = makeLabelID(label);
-
-    this.addEventListener("focus", () =>
-      this.template.getElementById(__inputID__).focus()
-    );
-
-    this.addEventListener("input", ({ target }) => {
-      const value =
-        target.localName === "input" ? target.value : target.textContent;
-
-      this.value = value;
-
-      this.template
-        .querySelector("label")
-        .classList.toggle("hidden", Boolean(value));
-    });
-  },
   handleBuild({ label = "", type = "content" }) {
     const __inputID__ = makeLabelID(label);
 
@@ -96,6 +76,7 @@ Frontend.Element.Register("core-input", {
             role="${type}box"
           >`;
         break;
+
       case "content":
       default:
         inputElement = Frontend.Element.html`
@@ -118,5 +99,21 @@ Frontend.Element.Register("core-input", {
           <label id="${__inputID__}-label">${label}</label>
           ${inputElement}
         </div>`;
+  },
+  handleMount({ label = "" }) {
+    this.setAttribute("tabIndex", 0);
+
+    const __inputID__ = makeLabelID(label);
+
+    this.addEventListener("focus", () =>
+      this.querySelector(`#${__inputID__}`).focus()
+    );
+
+    this.addEventListener("input", ({ target }) => {
+      const value =
+        target.localName === "input" ? target.value : target.textContent;
+      this.value = value;
+      this.querySelector("label").classList.toggle("hidden", Boolean(value));
+    });
   }
 });

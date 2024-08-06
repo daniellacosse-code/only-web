@@ -113,6 +113,7 @@ Backend.Page.Register(route, {
           display: block;
           font-family: system-ui;
           padding: var(--size-narrow);
+          padding-left: var(--size-large);
           text-align: right;
           transition: background-color var(--animation-duration-fast) var(--animation-timing-function);
           user-select: none;

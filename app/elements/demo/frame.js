@@ -5,19 +5,17 @@ import "/app/elements/core/loading/skeleton.js";
 
 Frontend.Element.Register("demo-frame", {
   buildAttributes: {
+    author: String,
     height: Number,
     src: String,
-    title: String,
-    author: String
-  },
-  handleMount() {
-    requestAnimationFrame(() => {
-      this.querySelector("iframe").addEventListener("load", () => {
-        this.querySelector("core-loading-skeleton").classList.add("loaded");
-      });
-    });
+    title: String
   },
   handleBuild({ author = "", height = 500, src, title = "Demo Frame" }) {
+    const authorElement =
+      author &&
+      Frontend.Element
+        .html`<core-text class="author">Author: ${author}</core-text>`;
+
     return Frontend.Element.html`<style>
       :host {
         display: flex;
@@ -76,11 +74,12 @@ Frontend.Element.Register("demo-frame", {
     <div class="frame-container">
       <iframe src="${src}" title="${title}" loading="lazy"></iframe>
       <core-loading-skeleton></core-loading-skeleton>
-      ${
-        author &&
-        Frontend.Element
-          .html`<core-text class="author">Author: ${author}</core-text>`
-      }
+      ${authorElement}
     </div>`;
+  },
+  handleMount() {
+    this.querySelector("iframe").addEventListener("load", () => {
+      this.querySelector("core-loading-skeleton").classList.add("loaded");
+    });
   }
 });
