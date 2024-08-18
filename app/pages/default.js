@@ -245,16 +245,6 @@ Backend.Page.Register(route, {
             </demo-frame>
           </section>
           <section>
-            <demo-frame id="sql"
-              title="Web Assembly: SQL"
-              src="https://sqlime.org/"
-              author="nalgeon">
-              <core-text>
-                <b>Experience the power of SQL in-browser.</b> SQLime is a web-based SQL IDE that runs entirely in your browser, powered by WebAssembly-compiled SQLite. Write queries, visualize results, and learn SQL concepts in-place.
-              </core-text>
-            </demo-frame>
-          </section>
-          <section>
             <demo-frame id="diablo"
               title="Web Assembly: Diablo"
               src="https://d07riv.github.io/diabloweb/"
@@ -265,6 +255,16 @@ Backend.Page.Register(route, {
                 <b>Relive the classic dungeon-crawling experience, now in your browser.</b> GalaXyHaXz and the devilution team has brought the original Diablo to the web using WebAssembly, a groundbreaking technology that enables high-performance applications to run directly in your website. Prepare to slay demons and collect loot, all without leaving your web browser.
               </core-text>
             </demo-frame>
+          </section>
+          <section>
+            <demo-link id="sql"
+              title="Web Assembly: SQL ↗️"
+              src="https://sqlime.org/"
+              author="nalgeon">
+              <core-text>
+                <b>Experience the power of SQL in-browser.</b> SQLime is a web-based SQL IDE that runs entirely in your browser, powered by WebAssembly-compiled SQLite. Write queries, visualize results, and learn SQL concepts in-place.
+              </core-text>
+            </demo-link>
           </section>
           <section>
             <demo-frame id="frustrum-culling"
@@ -284,8 +284,8 @@ Backend.Page.Register(route, {
         const sidebarMenuContents = [
           { content: "Audio: Synthesizer", href: "#synthesizer" },
           { content: "Audio: Chord Reader", href: "#chord-reader" },
-          { content: "Web Assembly: SQL", href: "#sql" },
           { content: "Web Assembly: Diablo", href: "#diablo" },
+          { content: "Web Assembly: SQL", href: "#sql" },
           { content: "WebGPU: Frustrum Culling", href: "#frustrum-culling" }
         ];
 
