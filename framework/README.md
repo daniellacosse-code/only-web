@@ -26,7 +26,8 @@ A basic understanding of native web development. MDN has a great [introduction t
 
 ### benchmarks
 
-![benchmarks](https://c10.patreonusercontent.com/4/patreon-media/p/post/99703883/3a76a7cd607e4d50bc1ee9c684c33b0e/e30%3D/1.png?token-time=1711670400&token-hash=Oc2E9Tq6jbzAbKSqWXWvyIE3K1FZNjnVkTBDyecyiM4%3D)
+<img width="500" alt="Screenshot 2024-10-03 at 19 39 03" src="https://github.com/user-attachments/assets/b647a602-3254-4c8a-a732-a7f1686fb5bd">
+
 
 ```
 cpu: Apple M1 Max
