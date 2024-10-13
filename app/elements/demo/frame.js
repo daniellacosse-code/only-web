@@ -1,7 +1,7 @@
 import Frontend from "/framework/frontend/module.js";
 
-import "/app/elements/core/text.js";
-import "/app/elements/core/loading/skeleton.js";
+// import "/app/elements/core/text.js";
+// import "/app/elements/core/loading/skeleton.js";
 
 Frontend.Element.Register("demo-frame", {
   buildAttributes: {
