@@ -25,7 +25,7 @@ export default (text) => {
 
       // replace multiline comments
       // (now single line thanks to the above)
-      .replaceAll(/<\!--.*-->|\/\*.*\*\//g, "")
+      .replaceAll(/<\!--.*?-->|\/\*.*?\*\//g, "")
       .trim()
 
     // there are more spaces you could remove
