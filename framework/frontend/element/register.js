@@ -2,8 +2,8 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import Shared from "/framework/shared/module.js";
-import html from "/framework/frontend/element/html.js";
+import Shared from "../../shared/module.js";
+import html from "./html.js";
 
 /**
  * Registers a custom element with the global customElements map
