@@ -91,7 +91,6 @@ export default async function Inliner(request, messagesFolder) {
           .replaceAll(' from "/', ` from "${origin}/`)
           .replaceAll('import "/', `import "${origin}/`);
         result.push(Response.html`<script
-          async
           type="module"
           src="data:application/javascript;base64,${encode(
             sanitizedScript

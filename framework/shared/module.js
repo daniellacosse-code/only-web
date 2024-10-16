@@ -13,7 +13,7 @@ import Log, { LogError } from "./log.js";
  * A handful of shared utilities that can be utilized across the frontend and backend.
  * @module Shared
  */
-export default {
+globalThis.Shared = {
   UserAgent: {
     parse,
     check,
@@ -27,3 +27,5 @@ export default {
   LogError,
   handleTemplate
 };
+
+export default globalThis.Shared;

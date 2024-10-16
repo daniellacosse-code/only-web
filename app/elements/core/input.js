@@ -1,5 +1,3 @@
-import Frontend from "/framework/frontend/module.js";
-
 const sharedStyles = Frontend.Element.html`<style>
   .wrapper,
   input,

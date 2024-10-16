@@ -72,7 +72,8 @@ const _Response = (mimetype = "text/html") => {
 
               // handle string, number
             } else if (typeof subinsertion === "string") {
-              result.push(Shared.HTML.escape(String(subinsertion)));
+              // result.push(Shared.HTML.escape(String(subinsertion)));
+              result.push(String(subinsertion));
             } else if (typeof subinsertion === "number") {
               result.push(subinsertion);
             }

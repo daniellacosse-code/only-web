@@ -1,7 +1,7 @@
 // @ts-check
 
 import PageResponse from "./response.js";
-import Shared from "../../shared/module.js";
+import "../../shared/module.js";
 
 // TODO: move livereload to repo-agnotic code
 const LIVERELOAD_PORT = 35729;
@@ -152,9 +152,6 @@ export default (route, options) => {
           <html lang="${request.language}">
             ${response}
             <script type="module">
-              import Frontend from "/framework/frontend/module.js";
-              import Shared from "/framework/shared/module.js";
-
               (function () {
                 // check browser requirements
                 if (

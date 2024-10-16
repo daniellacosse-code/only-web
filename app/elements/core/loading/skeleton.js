@@ -1,5 +1,3 @@
-import Frontend from "/framework/frontend/module.js";
-
 Frontend.Element.Register(
   "core-loading-skeleton",
   () => Frontend.Element.html`<style>

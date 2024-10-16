@@ -1,8 +1,3 @@
-import Frontend from "/framework/frontend/module.js";
-
-// import "/app/elements/core/text.js";
-// import "/app/elements/core/link.js";
-
 Frontend.Element.Register("demo-link", {
   buildAttributes: {
     src: String,
