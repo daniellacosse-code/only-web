@@ -3,7 +3,7 @@ $Frontend.Element.Register("core-text", {
     type: String
   },
   handleBuild({ type = "paragraph" }) {
-    return Frontend.Element.html`<style>
+    return $Frontend.Element.html`<style>
         slot {
           cursor: inherit;
           font-family: system-ui;
