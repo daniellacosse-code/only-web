@@ -1,4 +1,4 @@
-const sharedStyles = Frontend.Element.html`<style>
+const sharedStyles = $Frontend.Element.html`<style>
   button {
     width: 100%;
     height: 100%;
@@ -41,7 +41,7 @@ $Frontend.Element.Register("core-button", {
   },
   handleBuild({ disabled }) {
     if (disabled)
-      return Frontend.Element.html`${sharedStyles}
+      return $Frontend.Element.html`${sharedStyles}
           <style>
             button {
               cursor: not-allowed;
@@ -52,7 +52,7 @@ $Frontend.Element.Register("core-button", {
             <slot></slot>
           </button>`;
 
-    return Frontend.Element.html`${sharedStyles}
+    return $Frontend.Element.html`${sharedStyles}
         <style>
           button:hover,
           button:active,
