@@ -8,10 +8,10 @@ $Frontend.Element.Register("demo-frame", {
   handleBuild({ author = "", height = 500, src, title = "Demo Frame" }) {
     const authorElement =
       author &&
-      Frontend.Element
+      $Frontend.Element
         .html`<core-text class="author">Author: ${author}</core-text>`;
 
-    return Frontend.Element.html`<style>
+    return $Frontend.Element.html`<style>
       :host {
         display: flex;
         flex-direction: column;
