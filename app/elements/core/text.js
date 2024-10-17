@@ -1,4 +1,4 @@
-Frontend.Element.Register("core-text", {
+$Frontend.Element.Register("core-text", {
   buildAttributes: {
     type: String
   },

@@ -1,46 +1,14 @@
-import { bundle } from "https://deno.land/x/emit@0.40.0/mod.ts";
-
-import Backend from "/framework/backend/module.js";
-
 import * as constants from "/app/constants.js";
 import OnlyWebTheme from "/app/pages/shared-theme.js";
-import { encode } from "https://deno.land/std@v0.56.0/encoding/base64.ts";
 
 const route = "/";
 
-function utf8ToBase64(str) {
-  return btoa(
-    encodeURIComponent(str).replace(
-      /%([0-9A-F]{2})/g,
-      function toSolidBytes(match, p1) {
-        return String.fromCharCode("0x" + p1);
-      }
-    )
-  );
-}
-
-Backend.Page.Register(route, {
+$Backend.Page.Register(route, {
   handleRequest: async (request) => {
-    const inliner = await Backend.Page.Inliner(request, "/app/assets/messages");
-
-    const { code: frontendFrameworkSource } = await bundle(
-      `${Deno.cwd()}/framework/frontend/module.js`,
-      {
-        allowRemote: true,
-        minify: true
-      }
+    const inliner = await $Backend.Page.Inliner(
+      request,
+      "/app/assets/messages"
     );
-
-    const { code: sharedFrameworkSource } = await bundle(
-      `${Deno.cwd()}/framework/shared/module.js`,
-      {
-        allowRemote: true,
-        minify: true
-      }
-    );
-
-    const frontendFrameworkSourceBase64 = utf8ToBase64(frontendFrameworkSource);
-    const sharedFrameworkSourceBase64 = utf8ToBase64(sharedFrameworkSource);
 
     const logoSrc =
       (request.url.origin.match(/localhost/)
@@ -54,13 +22,10 @@ Backend.Page.Register(route, {
         : constants.KEYCDN_IMAGE_ZONE_URL) +
       "/app/assets/images/logo/white.svg";
 
-    return Backend.Page.Response.html`<head>
+    return $Backend.Page.Response.html`<head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="manifest" href="/app/assets/manifest.json" />
-
-      <script type="module" src="data:application/javascript;base64,${frontendFrameworkSourceBase64}"></script>
-      <script type="module" src="data:application/javascript;base64,${sharedFrameworkSourceBase64}"></script>
 
       ${inliner.metadata({
         title: "2",
@@ -321,7 +286,7 @@ Backend.Page.Register(route, {
       </script>
     </body>`;
   },
-  handleServiceWorker: () => Backend.Page.Response.js`
+  handleServiceWorker: () => $Backend.Page.Response.js`
       self.addEventListener("install", (event) => {
         event.waitUntil(
           caches.open("${route}").then((cache) => {

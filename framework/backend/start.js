@@ -1,7 +1,6 @@
 import { existsSync } from "https://deno.land/std@0.224.0/fs/exists.ts";
 import { resolve } from "https://deno.land/std@0.216.0/path/mod.ts";
 import { serveFile } from "https://deno.land/std@0.140.0/http/file_server.ts";
-import { bundle } from "https://deno.land/x/emit@0.40.0/mod.ts";
 
 import * as constants from "./constants.js";
 
@@ -29,15 +28,11 @@ export default ({ port = resolveConfiguration("ONLY_WEB_SERVER_PORT") } = {}) =>
     const absolutePath = resolve(Deno.cwd(), `.${requestPath}`);
 
     if (requestPath.startsWith("/framework") && !existsSync(absolutePath)) {
-      const { code } = await bundle(
+      const { code } = await fetch(
         resolveConfiguration("ONLY_WEB_SOURCE") +
           "/" +
           resolveConfiguration("ONLY_WEB_SOURCE_BRANCH") +
-          requestPath,
-        {
-          allowRemote: true,
-          minify: true
-        }
+          requestPath
       );
 
       const headers = new Headers(proxiedResponse.headers);
@@ -51,18 +46,6 @@ export default ({ port = resolveConfiguration("ONLY_WEB_SERVER_PORT") } = {}) =>
     }
 
     try {
-      if (absolutePath.endsWith("module.js")) {
-        const { code } = await bundle(absolutePath, {
-          minify: true
-        });
-
-        return new Response(code, {
-          headers: {
-            "content-type": "text/javascript; charset=utf-8"
-          }
-        });
-      }
-
       return serveFile(request, absolutePath);
     } catch {
       return new Response("Not Found", { status: 404 });

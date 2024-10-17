@@ -2,7 +2,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import "../../shared/module.js";
+import Shared from "../../shared/module.js";
 import html from "./html.js";
 
 /**

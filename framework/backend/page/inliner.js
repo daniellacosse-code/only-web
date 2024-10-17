@@ -227,6 +227,26 @@ export default async function Inliner(request, messagesFolder) {
       });
 
       return Response.html`${tags}`;
+    },
+
+    sources(...sourceCodes) {
+      const result = [];
+
+      for (const code of sourceCodes) {
+        result.push(
+          Response.html`<script
+            type="module"
+            src="data:application/javascript;base64,${encode(
+              encodeURIComponent(code).replace(
+                /%([0-9A-F]{2})/g,
+                (_, codepoint) => String.fromCharCode(Number(`0x${codepoint}`))
+              )
+            )}"
+          ></script>`
+        );
+      }
+
+      return Response.html`${result}`;
     }
   };
 }

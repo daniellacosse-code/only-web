@@ -1,4 +1,4 @@
-Frontend.Element.Register("core-image", {
+$Frontend.Element.Register("core-image", {
   buildAttributes: {
     alt: String,
     height: String,

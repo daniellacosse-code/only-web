@@ -52,7 +52,7 @@ const sharedStyles = Frontend.Element.html`<style>
 
 const makeLabelID = (label) => label.toLowerCase().replace(/\s/g, "-");
 
-Frontend.Element.Register("core-input", {
+$Frontend.Element.Register("core-input", {
   buildAttributes: {
     label: String,
     type: String

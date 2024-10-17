@@ -1,6 +1,4 @@
-import Backend from "/framework/backend/module.js";
-
-Backend.Page.Register("/demos/music", {
+$Backend.Page.Register("/demos/music", {
   handleRequest: () => {
     return Backend.Page.Response.html`<head>
         <!-- TODO -->

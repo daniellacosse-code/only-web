@@ -1,4 +1,4 @@
-Frontend.Element.Register("demo-frame", {
+$Frontend.Element.Register("demo-frame", {
   buildAttributes: {
     author: String,
     height: Number,

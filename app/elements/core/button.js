@@ -35,7 +35,7 @@ const sharedStyles = Frontend.Element.html`<style>
   }
 </style>`;
 
-Frontend.Element.Register("core-button", {
+$Frontend.Element.Register("core-button", {
   buildAttributes: {
     disabled: Boolean
   },

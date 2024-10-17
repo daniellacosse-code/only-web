@@ -1,4 +1,4 @@
-Frontend.Element.Register(
+$Frontend.Element.Register(
   "core-loading-skeleton",
   () => Frontend.Element.html`<style>
     div {

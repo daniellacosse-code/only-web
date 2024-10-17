@@ -1,7 +1,10 @@
 // @ts-check
 
+import { bundle } from "https://deno.land/x/emit@0.40.0/mod.ts";
+
 import PageResponse from "./response.js";
-import "../../shared/module.js";
+import Inliner from "./inliner.js";
+import Shared from "../../shared/module.js";
 
 // TODO: move livereload to repo-agnotic code
 const LIVERELOAD_PORT = 35729;
@@ -147,9 +150,17 @@ export default (route, options) => {
           detail: response
         });
 
+        const inliner = await Inliner(request);
+
         const pageResponse = PageResponse.html`
           <!DOCTYPE html>
           <html lang="${request.language}">
+            ${inliner.sources(
+              (await bundle("framework/shared/module.js", { minify: true }))
+                .code,
+              (await bundle("framework/frontend/module.js", { minify: true }))
+                .code
+            )}
             ${response}
             <script type="module">
               (function () {
@@ -157,11 +168,11 @@ export default (route, options) => {
                 if (
                   !(
                     navigator.userAgent &&
-                    Shared.UserAgent.check(
-                      Shared.UserAgent.parse(navigator.userAgent),
-                      Shared.UserAgent.merge(
+                    $Shared.UserAgent.check(
+                      $Shared.UserAgent.parse(navigator.userAgent),
+                      $Shared.UserAgent.merge(
                         ${requirements},
-                        Frontend.requirements.userAgent
+                        $Frontend.requirements.userAgent
                       )                        
                     )
                   )

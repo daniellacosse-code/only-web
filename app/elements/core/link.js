@@ -1,4 +1,4 @@
-Frontend.Element.Register("core-link", {
+$Frontend.Element.Register("core-link", {
   buildAttributes: {
     href: String
   },

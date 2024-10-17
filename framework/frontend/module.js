@@ -6,7 +6,7 @@ import Register from "./element/register.js";
  * A module containing the frontend-specific aspects of the framework.
  * @module Frontend
  */
-globalThis.Frontend = {
+globalThis.$Frontend = {
   requirements,
   Element: {
     Register,
@@ -14,4 +14,4 @@ globalThis.Frontend = {
   }
 };
 
-export default globalThis.Frontend;
+export default globalThis.$Frontend;

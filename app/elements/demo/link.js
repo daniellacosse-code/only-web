@@ -1,4 +1,4 @@
-Frontend.Element.Register("demo-link", {
+$Frontend.Element.Register("demo-link", {
   buildAttributes: {
     src: String,
     title: String

@@ -1,6 +1,4 @@
-import Frontend from "/framework/frontend/module.js";
-
-Frontend.Element.Register("counter-demo", {
+$Frontend.Element.Register("counter-demo", {
   host: {
     handleMount() {
       this.state ??= {};
