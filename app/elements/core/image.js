@@ -8,7 +8,7 @@ $Frontend.Element.Register("core-image", {
   },
   handleBuild({ height, loaded, width }) {
     if (loaded) {
-      return Frontend.Element.html`<style>
+      return $Frontend.Element.html`<style>
             img {
               display: inline-block;
               width: ${width};
@@ -21,7 +21,7 @@ $Frontend.Element.Register("core-image", {
           ${this.__image__}`;
     }
 
-    return Frontend.Element.html`
+    return $Frontend.Element.html`
         <style>
           core-loading-skeleton {
             display: inline-block;
