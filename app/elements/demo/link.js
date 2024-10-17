@@ -4,7 +4,7 @@ $Frontend.Element.Register("demo-link", {
     title: String
   },
   handleBuild({ src, title }) {
-    return Frontend.Element.html`
+    return $Frontend.Element.html`
       <style>
         core-link {
           --core-link-color: var(--color-neutral);
