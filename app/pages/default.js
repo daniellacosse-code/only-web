@@ -267,7 +267,7 @@ $Backend.Page.Register(route, {
         const renderSidebarMenuContents = (contents) => {
           sidebarOptionsListElement.replaceChildren(
             // TODO(#195): how do I/can I/should I nest templates?
-            ...contents.flatMap(({href, content}) => Array.from(Frontend.Element.html(["<li><a href='", "'>", "</a></li>"], href, content)))
+            ...contents.flatMap(({href, content}) => Array.from($Frontend.Element.html(["<li><a href='", "'>", "</a></li>"], href, content)))
           );
         };
 
