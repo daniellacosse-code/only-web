@@ -3,7 +3,7 @@ $Frontend.Element.Register("core-link", {
     href: String
   },
   handleBuild({ href = "#" }) {
-    return Frontend.Element.html`<style>
+    return $Frontend.Element.html`<style>
       a {
         display: inline-block;
       }
