@@ -1,3 +1,5 @@
+import "/framework/backend/module.js";
+
 import * as constants from "/app/constants.js";
 import OnlyWebTheme from "/app/pages/shared-theme.js";
 

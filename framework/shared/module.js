@@ -1,7 +1,7 @@
 import handleTemplate from "./handle-template.js";
 
 import escape from "./html/escape.js";
-import minify from "./html/minify.js";
+// import minify from "./html/minify.js";
 
 import parse from "./user-agent/parse.js";
 import check from "./user-agent/check.js";
@@ -20,8 +20,8 @@ globalThis.$Shared = {
     merge
   },
   HTML: {
-    escape,
-    minify
+    escape
+    // minify
   },
   Log,
   LogError,

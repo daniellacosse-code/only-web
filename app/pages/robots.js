@@ -1,3 +1,5 @@
+import "/framework/backend/module.js";
+
 $Backend.Page.Register(
   "/robots.txt",
   () => $Backend.Page.Response.text`

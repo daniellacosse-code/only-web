@@ -1,6 +1,7 @@
 // @ts-check
 
 import { encode } from "https://deno.land/std@v0.56.0/encoding/base64.ts";
+import { minifyHTML } from "https://deno.land/x/minify/mod.ts";
 import * as path from "https://deno.land/std@0.221.0/path/mod.ts";
 
 import Response from "./response.js";
@@ -87,7 +88,10 @@ export default async function Inliner(request, messagesFolder) {
           level: "debug"
         });
 
-        const sanitizedScript = Shared.HTML.minify(fileContents)
+        const sanitizedScript = minifyHTML(fileContents, {
+          minifyCSS: true,
+          minifyJS: true
+        })
           .replaceAll(' from "/', ` from "${origin}/`)
           .replaceAll('import "/', `import "${origin}/`);
         result.push(Response.html`<script
