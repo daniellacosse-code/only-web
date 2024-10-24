@@ -159,7 +159,7 @@ Backend.Page.Register(route, {
             top: 0;
           }
 
-          nav.open, nav:hover, nav:focus-within, nav:active {
+          nav.open, nav:hover {
             transform: translateX(0%);
           }
         }
