@@ -1,6 +1,4 @@
 // @ts-check
-
-import { minifyHTML } from "https://deno.land/x/minify@1.0.1/mod.ts";
 import Shared from "../../shared/module.js";
 /**
  * A utility for creating a templateable response with a specific mimetype
@@ -48,10 +46,7 @@ const _Response = (mimetype = "text/html") => {
         insertions,
         handleInsertion: (insertion) => {
           if (insertion instanceof MimetypeResponse) {
-            return minifyHTML(insertion.content, {
-              minifyCSS: true,
-              minifyJS: true
-            });
+            return Shared.HTML.minify(insertion.content);
           }
 
           const subinsertions = Array.isArray(insertion)

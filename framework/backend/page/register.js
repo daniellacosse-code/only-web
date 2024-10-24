@@ -150,17 +150,22 @@ export default (route, options) => {
           detail: response
         });
 
-        const inliner = await Inliner(request);
+        const frameworkSourceModules = [
+          "framework/shared/module.js",
+          "framework/frontend/module.js"
+        ];
 
+        const frameworkSources = await Promise.all(
+          frameworkSourceModules.map(async (module) =>
+            Shared.HTML.minify((await bundle(module)).code)
+          )
+        );
+
+        const inliner = await Inliner(request);
         const pageResponse = PageResponse.html`
           <!DOCTYPE html>
           <html lang="${request.language}">
-            ${inliner.sources(
-              (await bundle("framework/shared/module.js", { minify: true }))
-                .code,
-              (await bundle("framework/frontend/module.js", { minify: true }))
-                .code
-            )}
+            ${inliner.sources(...frameworkSources)}
             ${response}
             <script type="module">
               (function () {
