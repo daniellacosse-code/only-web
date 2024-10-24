@@ -319,7 +319,7 @@ Backend.Page.Register(route, {
           startX = clientX;
         });
 
-        globalThis.addEventListener('touchend', ({ changedTouches: [{ clientX }]}) => {
+        globalThis.addEventListener('touchmove', ({ changedTouches: [{ clientX }]}) => {
           endX = clientX;
 
           if (endX - startX > 100) {
