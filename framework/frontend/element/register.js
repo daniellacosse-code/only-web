@@ -129,6 +129,7 @@ export default (tag, options) => {
       }
 
       /**
+       * @override
        * @param {keyof ElementEventMap} eventType
        * @param {(event: Event) => void} listener
        * @param {AddEventListenerOptions} options
@@ -171,6 +172,7 @@ export default (tag, options) => {
       }
 
       /**
+       * @override
        * @param {string} selector
        * @returns {HTMLElement | null}
        * @throws {Error} Throws an error if the selector is invalid

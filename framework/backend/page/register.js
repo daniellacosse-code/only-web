@@ -123,7 +123,7 @@ export default (route, options) => {
 
           return serviceWorker;
         } catch (error) {
-          Shared.LogError(error);
+          Shared.LogError(/** @type {Error} */ (error));
           return new Response("Internal Server Error", { status: 500 });
         }
       }
@@ -228,7 +228,7 @@ export default (route, options) => {
         // TODO(#177) TypeError: Return value from serve handler must be a response or a promise resolving to a response
         return pageResponse;
       } catch (error) {
-        Shared.LogError(error);
+        Shared.LogError(/** @type {Error} */ (error));
         return new Response("Internal Server Error", { status: 500 });
       }
     }

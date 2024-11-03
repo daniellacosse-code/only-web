@@ -58,7 +58,7 @@ export default async function Inliner(request, messagesFolder) {
       Shared.Log({
         message: `[framework/backend/inliner] Failed to load messages for language "${request.language}"`,
         level: "warn",
-        detail: { error: error.message }
+        detail: { error: /** @type {Error} */ (error).message }
       });
     }
   }
