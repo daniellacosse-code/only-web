@@ -1,11 +1,9 @@
-import Frontend from "/framework/frontend/module.js";
-
-Frontend.Element.Register("core-text", {
+$Frontend.Element.Register("core-text", {
   buildAttributes: {
     type: String
   },
   handleBuild({ type = "paragraph" }) {
-    return Frontend.Element.html`<style>
+    return $Frontend.Element.html`<style>
         slot {
           cursor: inherit;
           font-family: system-ui;

@@ -1,7 +1,4 @@
-import Frontend from "/framework/frontend/module.js";
-import "/app/elements/core/loading/skeleton.js";
-
-Frontend.Element.Register("core-image", {
+$Frontend.Element.Register("core-image", {
   buildAttributes: {
     alt: String,
     height: String,
@@ -11,7 +8,7 @@ Frontend.Element.Register("core-image", {
   },
   handleBuild({ height, loaded, width }) {
     if (loaded) {
-      return Frontend.Element.html`<style>
+      return $Frontend.Element.html`<style>
             img {
               display: inline-block;
               width: ${width};
@@ -24,7 +21,7 @@ Frontend.Element.Register("core-image", {
           ${this.__image__}`;
     }
 
-    return Frontend.Element.html`
+    return $Frontend.Element.html`
         <style>
           core-loading-skeleton {
             display: inline-block;

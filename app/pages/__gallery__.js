@@ -1,10 +1,10 @@
-import Backend from "/framework/backend/module.js";
+import "/framework/backend/module.js";
 
 import * as constants from "/app/constants.js";
 import OnlyWebTheme from "/app/pages/shared-theme.js";
 
-Backend.Page.Register("/__gallery__", async (request) => {
-  const inliner = await Backend.Page.Inliner(request, "/app/assets/messages");
+$Backend.Page.Register("/__gallery__", async (request) => {
+  const inliner = await $Backend.Page.Inliner(request, "/app/assets/messages");
 
   const logoSrc =
     (request.url.origin.match(/localhost/)
@@ -12,7 +12,7 @@ Backend.Page.Register("/__gallery__", async (request) => {
       : constants.KEYCDN_IMAGE_ZONE_URL) +
     "/app/assets/images/logo/maskable.png";
 
-  return Backend.Page.Response.html`<head>
+  return $Backend.Page.Response.html`<head>
     <meta charset="utf-8" />
     <link rel="icon" href="/app/assets/images/logo/maskable.png" />
     <link rel="manifest" href="/app/assets/manifest.json" />

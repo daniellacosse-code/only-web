@@ -1,11 +1,9 @@
-import Frontend from "/framework/frontend/module.js";
-
-Frontend.Element.Register("core-link", {
+$Frontend.Element.Register("core-link", {
   buildAttributes: {
     href: String
   },
   handleBuild({ href = "#" }) {
-    return Frontend.Element.html`<style>
+    return $Frontend.Element.html`<style>
       a {
         display: inline-block;
       }

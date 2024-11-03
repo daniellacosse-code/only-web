@@ -2,8 +2,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import Shared from "/framework/shared/module.js";
-import html from "/framework/frontend/element/html.js";
+import html from "./html.js";
 
 /**
  * Registers a custom element with the global customElements map
@@ -26,7 +25,7 @@ import html from "/framework/frontend/element/html.js";
  */
 export default (tag, options) => {
   if (globalThis.customElements.get(tag))
-    return Shared.Log({
+    return $Shared.Log({
       message: `Element ${tag} already registered.`,
       level: "warn"
     });
@@ -92,7 +91,7 @@ export default (tag, options) => {
       }
 
       connectedCallback() {
-        Shared.Log({
+        $Shared.Log({
           message: `[framework/frontend/element] <${tag}> mounted`,
           level: "debug"
         });
@@ -109,7 +108,7 @@ export default (tag, options) => {
        * @param {*} newValue
        */
       attributeChangedCallback(name, oldValue, newValue) {
-        Shared.Log({
+        $Shared.Log({
           message: `[framework/frontend/element] <${tag}> attributes changed`,
           detail: { name, oldValue, newValue },
           level: "debug"
@@ -119,7 +118,7 @@ export default (tag, options) => {
       }
 
       disconnectedCallback() {
-        Shared.Log({
+        $Shared.Log({
           message: `[framework/frontend/element] <${tag}> dismounted`,
           level: "debug"
         });
@@ -130,12 +129,13 @@ export default (tag, options) => {
       }
 
       /**
+       * @override
        * @param {keyof ElementEventMap} eventType
        * @param {(event: Event) => void} listener
        * @param {AddEventListenerOptions} options
        */
       addEventListener(eventType, listener, options) {
-        Shared.Log({
+        $Shared.Log({
           message: `[framework/frontend/element] <${tag}> listener added for "${eventType}" event`,
           level: "debug"
         });
@@ -163,7 +163,7 @@ export default (tag, options) => {
             if (event.target)
               message += ` triggered by internal <${element.tagName.toLocaleLowerCase()}>`;
 
-            Shared.Log({ message, detail: { event }, level: "debug" });
+            $Shared.Log({ message, detail: { event }, level: "debug" });
 
             return listener(event);
           },
@@ -172,6 +172,7 @@ export default (tag, options) => {
       }
 
       /**
+       * @override
        * @param {string} selector
        * @returns {HTMLElement | null}
        * @throws {Error} Throws an error if the selector is invalid
@@ -185,14 +186,14 @@ export default (tag, options) => {
 
       #buildTemplate() {
         if (!this.template) {
-          Shared.Log({
+          $Shared.Log({
             message: `[framework/frontend/element#UPDATE_TEMPLATE] <${tag}> template not yet initialized, skipping update`,
             level: "debug"
           });
           return;
         }
 
-        Shared.Log({
+        $Shared.Log({
           message: `[framework/frontend/element#UPDATE_TEMPLATE] updating template for <${tag}>`,
           level: "debug"
         });
@@ -223,7 +224,7 @@ export default (tag, options) => {
         const newTemplateNode = this.template.querySelector("template");
 
         if (!newTemplateNode) {
-          Shared.Log({
+          $Shared.Log({
             message: `[framework/frontend/element#UPDATE_TEMPLATE] <${tag}> template missing <template> tag, cannot update template`,
             level: "warn"
           });
@@ -232,7 +233,7 @@ export default (tag, options) => {
 
         this.template.append(newTemplateNode.content.cloneNode(true));
 
-        Shared.Log({
+        $Shared.Log({
           message: `[framework/frontend/element#UPDATE_TEMPLATE] <${tag}> template updated`,
           level: "debug"
         });

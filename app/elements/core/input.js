@@ -1,6 +1,4 @@
-import Frontend from "/framework/frontend/module.js";
-
-const sharedStyles = Frontend.Element.html`<style>
+const sharedStyles = $Frontend.Element.html`<style>
   .wrapper,
   input,
   [contenteditable="true"],
@@ -54,7 +52,7 @@ const sharedStyles = Frontend.Element.html`<style>
 
 const makeLabelID = (label) => label.toLowerCase().replace(/\s/g, "-");
 
-Frontend.Element.Register("core-input", {
+$Frontend.Element.Register("core-input", {
   buildAttributes: {
     label: String,
     type: String
@@ -69,7 +67,7 @@ Frontend.Element.Register("core-input", {
       case "password":
       case "email":
       case "search":
-        inputElement = Frontend.Element.html`
+        inputElement = $Frontend.Element.html`
           <input id="${__inputID__}"
             type="${type}" 
             aria-labelledby="${__inputID__}-label" 
@@ -79,7 +77,7 @@ Frontend.Element.Register("core-input", {
 
       case "content":
       default:
-        inputElement = Frontend.Element.html`
+        inputElement = $Frontend.Element.html`
             <style>
               b, i, u { color: var(--color-foreground); }
               b { font-weight: bold; }
@@ -93,7 +91,7 @@ Frontend.Element.Register("core-input", {
             ></div>`;
     }
 
-    return Frontend.Element.html`
+    return $Frontend.Element.html`
         ${sharedStyles}
         <div class="wrapper">
           <label id="${__inputID__}-label">${label}</label>

@@ -2,9 +2,6 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import escape from "/framework/shared/html/escape.js";
-import handleTemplate from "/framework/shared/handle-template.js";
-
 /**
  * A utility for creating a templateable HTMLCollection
  * @param {TemplateStringsArray} template The template
@@ -14,7 +11,7 @@ import handleTemplate from "/framework/shared/handle-template.js";
 export default (template, ...insertions) => {
   const wrapper = globalThis.document.createElement("div");
 
-  wrapper.innerHTML = handleTemplate({
+  wrapper.innerHTML = $Shared.handleTemplate({
     template,
     insertions,
     handleInsertion: (insertion) => {
@@ -27,7 +24,7 @@ export default (template, ...insertions) => {
 
       if (insertion instanceof HTMLElement) return insertion.outerHTML;
 
-      return escape(
+      return $Shared.HTML.escape(
         Array.isArray(insertion) ? insertion.join("") : String(insertion)
       );
     }

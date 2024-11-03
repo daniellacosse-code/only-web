@@ -1,5 +1,4 @@
 // @ts-check
-
 import Shared from "../../shared/module.js";
 /**
  * A utility for creating a templateable response with a specific mimetype

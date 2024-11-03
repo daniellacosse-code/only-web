@@ -1,13 +1,16 @@
-import Backend from "/framework/backend/module.js";
+import "/framework/backend/module.js";
 
 import * as constants from "/app/constants.js";
 import OnlyWebTheme from "/app/pages/shared-theme.js";
 
 const route = "/";
 
-Backend.Page.Register(route, {
+$Backend.Page.Register(route, {
   handleRequest: async (request) => {
-    const inliner = await Backend.Page.Inliner(request, "/app/assets/messages");
+    const inliner = await $Backend.Page.Inliner(
+      request,
+      "/app/assets/messages"
+    );
 
     const logoSrc =
       (request.url.origin.match(/localhost/)
@@ -21,7 +24,7 @@ Backend.Page.Register(route, {
         : constants.KEYCDN_IMAGE_ZONE_URL) +
       "/app/assets/images/logo/white.svg";
 
-    return Backend.Page.Response.html`<head>
+    return $Backend.Page.Response.html`<head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="manifest" href="/app/assets/manifest.json" />
@@ -163,33 +166,6 @@ Backend.Page.Register(route, {
             transform: translateX(0%);
           }
         }
-
-        /**
-          * we must approximate the final styles for the page while the 
-          * framework loads to improve cumulative layout shift (CLS) - not great 
-          */
-
-        /* TODO(#209): systematically improve CLS so these classes can be deleted  */
-        nav header core-image.__bootstrap-cls__ {
-          height: 64px;
-          width: 64px;
-          display: inline-block;
-        }
-
-        article.__bootstrap-cls__ {
-          color: var(--color-foreground);
-        }
-
-        article header core-image.__bootstrap-cls__ {
-          width: 96px;
-          height: 96px;
-        }
-
-        nav header core-text.__bootstrap-cls__,
-        article header core-text.__bootstrap-cls__ {
-          font-weight: bold;
-          font-family: var(--core-text-size-title);
-        }
       </style>
     </head>
     <body>
@@ -279,8 +255,6 @@ Backend.Page.Register(route, {
         </article>
       </main>
       <script type="module">
-        import Frontend from "/framework/frontend/module.js";
-
         const sidebarMenuContents = [
           { content: "Audio: Synthesizer", href: "#synthesizer" },
           { content: "Audio: Chord Reader", href: "#chord-reader" },
@@ -296,7 +270,7 @@ Backend.Page.Register(route, {
         const renderSidebarMenuContents = (contents) => {
           sidebarOptionsListElement.replaceChildren(
             // TODO(#195): how do I/can I/should I nest templates?
-            ...contents.flatMap(({href, content}) => Array.from(Frontend.Element.html(["<li><a href='", "'>", "</a></li>"], href, content)))
+            ...contents.flatMap(({href, content}) => Array.from($Frontend.Element.html(["<li><a href='", "'>", "</a></li>"], href, content)))
           );
         };
 
@@ -331,7 +305,7 @@ Backend.Page.Register(route, {
       </script>
     </body>`;
   },
-  handleServiceWorker: () => Backend.Page.Response.js`
+  handleServiceWorker: () => $Backend.Page.Response.js`
       self.addEventListener("install", (event) => {
         event.waitUntil(
           caches.open("${route}").then((cache) => {

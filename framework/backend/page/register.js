@@ -1,6 +1,9 @@
 // @ts-check
 
+import { bundle } from "https://deno.land/x/emit@0.40.0/mod.ts";
+
 import PageResponse from "./response.js";
+import Inliner from "./inliner.js";
 import Shared from "../../shared/module.js";
 
 // TODO: move livereload to repo-agnotic code
@@ -120,7 +123,7 @@ export default (route, options) => {
 
           return serviceWorker;
         } catch (error) {
-          Shared.LogError(error);
+          Shared.LogError(/** @type {Error} */ (error));
           return new Response("Internal Server Error", { status: 500 });
         }
       }
@@ -147,24 +150,34 @@ export default (route, options) => {
           detail: response
         });
 
+        const frameworkSourceModules = [
+          "framework/shared/module.js",
+          "framework/frontend/module.js"
+        ];
+
+        const frameworkSources = await Promise.all(
+          frameworkSourceModules.map(async (module) =>
+            Shared.HTML.minify((await bundle(module)).code)
+          )
+        );
+
+        const inliner = await Inliner(request);
         const pageResponse = PageResponse.html`
           <!DOCTYPE html>
           <html lang="${request.language}">
+            ${inliner.sources(...frameworkSources)}
             ${response}
             <script type="module">
-              import Frontend from "/framework/frontend/module.js";
-              import Shared from "/framework/shared/module.js";
-
               (function () {
                 // check browser requirements
                 if (
                   !(
                     navigator.userAgent &&
-                    Shared.UserAgent.check(
-                      Shared.UserAgent.parse(navigator.userAgent),
-                      Shared.UserAgent.merge(
+                    $Shared.UserAgent.check(
+                      $Shared.UserAgent.parse(navigator.userAgent),
+                      $Shared.UserAgent.merge(
                         ${requirements},
-                        Frontend.requirements.userAgent
+                        $Frontend.requirements.userAgent
                       )                        
                     )
                   )
@@ -215,7 +228,7 @@ export default (route, options) => {
         // TODO(#177) TypeError: Return value from serve handler must be a response or a promise resolving to a response
         return pageResponse;
       } catch (error) {
-        Shared.LogError(error);
+        Shared.LogError(/** @type {Error} */ (error));
         return new Response("Internal Server Error", { status: 500 });
       }
     }

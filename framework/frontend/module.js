@@ -1,15 +1,17 @@
-import requirements from "/framework/frontend/requirements.js";
-import html from "/framework/frontend/element/html.js";
-import Register from "/framework/frontend/element/register.js";
+import requirements from "./requirements.js";
+import html from "./element/html.js";
+import Register from "./element/register.js";
 
 /**
  * A module containing the frontend-specific aspects of the framework.
  * @module Frontend
  */
-export default {
+globalThis.$Frontend = {
   requirements,
   Element: {
     Register,
     html
   }
 };
+
+export default globalThis.$Frontend;

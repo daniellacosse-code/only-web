@@ -1,8 +1,8 @@
-import Backend from "/framework/backend/module.js";
+import "/framework/backend/module.js";
 
-Backend.Page.Register("/demos/music", {
+$Backend.Page.Register("/demos/music", {
   handleRequest: () => {
-    return Backend.Page.Response.html`<head>
+    return $Backend.Page.Response.html`<head>
         <!-- TODO -->
          <style>
           :root {
@@ -459,7 +459,7 @@ Backend.Page.Register("/demos/music", {
       </body>
     `;
   },
-  handleServiceWorker: () => Backend.Page.Response.js`
+  handleServiceWorker: () => $Backend.Page.Response.js`
   self.addEventListener("install", (event) => {
     event.waitUntil(
       caches.open("/demos/music").then((cache) => {

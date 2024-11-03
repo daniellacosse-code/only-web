@@ -1,3 +1,5 @@
+import "/framework/shared/module.js";
+
 import { assertEquals } from "https://deno.land/std@0.219.0/assert/assert_equals.ts";
 import register from "/framework/frontend/element/register.js";
 

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { encode } from "https://deno.land/std@v0.56.0/encoding/base64.ts";
+import { encodeBase64 } from "https://deno.land/std@v0.224.0/encoding/base64.ts";
 import * as path from "https://deno.land/std@0.221.0/path/mod.ts";
 
 import Response from "./response.js";
@@ -58,7 +58,7 @@ export default async function Inliner(request, messagesFolder) {
       Shared.Log({
         message: `[framework/backend/inliner] Failed to load messages for language "${request.language}"`,
         level: "warn",
-        detail: { error: error.message }
+        detail: { error: /** @type {Error} */ (error).message }
       });
     }
   }
@@ -91,9 +91,8 @@ export default async function Inliner(request, messagesFolder) {
           .replaceAll(' from "/', ` from "${origin}/`)
           .replaceAll('import "/', `import "${origin}/`);
         result.push(Response.html`<script
-          async
           type="module"
-          src="data:application/javascript;base64,${encode(
+          src="data:application/javascript;base64,${encodeBase64(
             sanitizedScript
           )}"></script>`);
         Shared.Log({
@@ -228,6 +227,47 @@ export default async function Inliner(request, messagesFolder) {
       });
 
       return Response.html`${tags}`;
+    },
+
+    sources(...sourceCodes) {
+      Shared.Log({
+        message: `[framework/backend/inliner#sources] inlining sources "${sourceCodes.join(
+          ", "
+        )}"`,
+        level: "debug"
+      });
+
+      const result = [];
+
+      for (const code of sourceCodes) {
+        result.push(
+          Response.html`<script
+            type="module"
+            src="data:application/javascript;base64,${encodeBase64(
+              encodeURIComponent(code).replace(
+                /%([0-9A-F]{2})/g,
+                (_, codepoint) => String.fromCharCode(Number(`0x${codepoint}`))
+              )
+            )}"
+          ></script>`
+        );
+
+        console.log(code);
+
+        Shared.Log({
+          message: `[framework/backend/inliner#sources] inlined source "${code}"`,
+          level: "debug"
+        });
+      }
+
+      Shared.Log({
+        message: `[framework/backend/inliner#sources] completed for "${sourceCodes.join(
+          ", "
+        )}"`,
+        level: "debug"
+      });
+
+      return Response.html`${result}`;
     }
   };
 }

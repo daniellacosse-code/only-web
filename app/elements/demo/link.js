@@ -1,15 +1,10 @@
-import Frontend from "/framework/frontend/module.js";
-
-import "/app/elements/core/text.js";
-import "/app/elements/core/link.js";
-
-Frontend.Element.Register("demo-link", {
+$Frontend.Element.Register("demo-link", {
   buildAttributes: {
     src: String,
     title: String
   },
   handleBuild({ src, title }) {
-    return Frontend.Element.html`
+    return $Frontend.Element.html`
       <style>
         core-link {
           --core-link-color: var(--color-neutral);

@@ -10,7 +10,7 @@ Deno.test("Inliner", async () => {
 
   assertEquals(
     await inliner.elements(() => "register element").content,
-    `<script async type="module" src="data:application/javascript;base64,KCgpID0+ICJyZWdpc3RlciBlbGVtZW50IikoKTs="></script>`
+    `<script type="module" src="data:application/javascript;base64,KCgpID0+ICJyZWdpc3RlciBlbGVtZW50IikoKTs="></script>`
   );
 
   assertEquals(await inliner.message("test"), "test");

@@ -1,8 +1,6 @@
-import Frontend from "/framework/frontend/module.js";
-
-Frontend.Element.Register(
+$Frontend.Element.Register(
   "core-loading-skeleton",
-  () => Frontend.Element.html`<style>
+  () => $Frontend.Element.html`<style>
     div {
       display: block;
       width: 100%;
