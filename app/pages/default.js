@@ -71,7 +71,7 @@ $Backend.Page.Register(route, {
           display: flex;
           flex-direction: column;
           flex-shrink: 0;
-          height: 100svh;
+          height: 100vh;
           max-width: min-content;
           text-align: center;
           transform: translateX(0%);
@@ -162,7 +162,7 @@ $Backend.Page.Register(route, {
             top: 0;
           }
 
-          nav:hover, nav:focus-within, nav:active {
+          nav.open, nav:hover {
             transform: translateX(0%);
           }
         }
@@ -170,7 +170,7 @@ $Backend.Page.Register(route, {
     </head>
     <body>
       <main>
-      <nav>
+      <nav id="sidebar">
         <header>
           <core-image class="__bootstrap-cls__" src="${logoSrc}" alt="logo" width="64px" height="64px"></core-image>
           <core-text class="__bootstrap-cls__" type="title" style="font-weight: bold; font-size: 1.5rem;">${inliner.message(
@@ -263,6 +263,7 @@ $Backend.Page.Register(route, {
           { content: "WebGPU: Frustrum Culling", href: "#frustrum-culling" }
         ];
 
+        const sidebarElement = globalThis.document.getElementById("sidebar");
         const sidebarSearchElement = globalThis.document.getElementById("search");
         const sidebarOptionsListElement = globalThis.document.getElementById("sidebar-options");
 
@@ -284,6 +285,22 @@ $Backend.Page.Register(route, {
 
             renderSidebarMenuContents(filteredContents);
           })
+        });
+
+        // Swipe detection
+        let startX, endX;
+        globalThis.addEventListener('touchstart', ({ touches: [{ clientX }] }) => {
+          startX = clientX;
+        });
+
+        globalThis.addEventListener('touchmove', ({ changedTouches: [{ clientX }]}) => {
+          endX = clientX;
+
+          if (endX - startX > 100) {
+            sidebar.classList.add("open");
+          } else if (startX - endX > 100) {
+            sidebar.classList.remove("open");
+          }
         });
       </script>
     </body>`;
