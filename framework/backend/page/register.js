@@ -150,9 +150,10 @@ export default (route, options) => {
           detail: response
         });
 
+        // TODO: use local file in dev, url in prod
         const frameworkSourceModules = [
-          "framework/shared/module.js",
-          "framework/frontend/module.js"
+          new URL("https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/main/framework/shared/module.js"),
+          new URL("https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/main/framework/frontend/module.js")
         ];
 
         const frameworkSources = await Promise.all(
