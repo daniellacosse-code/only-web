@@ -1,4 +1,4 @@
-import Shared from "/framework/shared/module.js";
+import Shared from "./shared/bundle.js";
 
 Deno.bench(function benchHandleSmallTemplate() {
   Shared.handleTemplate({

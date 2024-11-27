@@ -4,7 +4,7 @@ import { encodeBase64 } from "https://deno.land/std@v0.224.0/encoding/base64.ts"
 import * as path from "https://deno.land/std@0.221.0/path/mod.ts";
 
 import Response from "./response.js";
-import Shared from "../../shared/module.js";
+import Shared from "../../shared/bundle.js";
 
 /**
  * @typedef {import("./model.js").PageRequest} PageRequest
@@ -229,9 +229,9 @@ export default async function Inliner(request, messagesFolder) {
       return Response.html`${tags}`;
     },
 
-    sources(...sourceCodes) {
+    frameworkBundles(...bundleNames) {
       Shared.Log({
-        message: `[framework/backend/inliner#sources] inlining sources "${sourceCodes.join(
+        message: `[framework/backend/inliner#sources] inlining sources "${bundleNames.join(
           ", "
         )}"`,
         level: "debug"
@@ -239,7 +239,7 @@ export default async function Inliner(request, messagesFolder) {
 
       const result = [];
 
-      for (const code of sourceCodes) {
+      for (const code of bundleNames) {
         result.push(
           Response.html`<script
             type="module"
@@ -261,7 +261,7 @@ export default async function Inliner(request, messagesFolder) {
       }
 
       Shared.Log({
-        message: `[framework/backend/inliner#sources] completed for "${sourceCodes.join(
+        message: `[framework/backend/inliner#sources] completed for "${bundleNames.join(
           ", "
         )}"`,
         level: "debug"
