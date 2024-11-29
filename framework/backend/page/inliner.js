@@ -1,5 +1,6 @@
 // @ts-check
 
+import { bundle } from "https://deno.land/x/emit@0.40.0/mod.ts";
 import { encodeBase64 } from "https://deno.land/std@v0.224.0/encoding/base64.ts";
 import * as path from "https://deno.land/std@0.221.0/path/mod.ts";
 
@@ -234,7 +235,7 @@ export default async function Inliner(
       return Response.html`${tags}`;
     },
 
-    frameworkBundles(...bundleNames) {
+    async frameworkBundles(...bundleNames) {
       Shared.Log({
         message: `[framework/backend/inliner#frameworkBundles] inlining sources "${bundleNames.join(
           ", "
@@ -244,20 +245,29 @@ export default async function Inliner(
 
       const result = [];
 
-      for (const name of bundleNames) {
+      for (const bundleName of bundleNames) {
         let code;
         try {
-          code = Deno.readTextFileSync(
-            path.resolve(Deno.cwd(), "bundles", `${name}.js`)
+          code = $Shared.HTML.minify(
+            (
+              await bundle(
+                path.join(
+                  Deno.cwd(),
+                  `framework/${bundleName
+                    .slice(1)
+                    .toLocaleLowerCase()}/bundle.js`
+                )
+              )
+            ).code
           );
         } catch (e) {
-          code = Deno.readTextFileSync(
-            new URL(
+          code = await (
+            await fetch(
               `https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/refs/heads/${branch}/bundles/${encodeURIComponent(
-                name
+                bundleName
               )}.js`
             )
-          );
+          ).text();
         }
 
         result.push(
