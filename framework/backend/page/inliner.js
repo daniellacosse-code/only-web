@@ -248,7 +248,7 @@ export default async function Inliner(
         let code;
         try {
           code = Deno.readTextFileSync(
-            path.join(Deno.cwd(), "bundles", `${name}.js`)
+            path.resolve(Deno.cwd(), "bundles", `${name}.js`)
           );
         } catch (e) {
           code = Deno.readTextFileSync(
