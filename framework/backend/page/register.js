@@ -18,6 +18,7 @@ const LIVERELOAD_PORT = 35729;
  * Registers a custom page in the global customPages map.
  * @param {string} route The route of the page
  * @param {object} options The options for the page
+ * @param {string} [options.frameworkBranch] The branch of the framework to use
  * @param {PlatformRequirements} [options.requirements] The platform requirements for the inliner
  * @param {PageHandler} options.handleRequest The request handler for the page
  * @param {PageHandler} [options.handleServiceWorker] The service worker request handler for the page
@@ -147,7 +148,7 @@ export default (route, options) => {
           detail: response
         });
 
-        const inliner = await Inliner(request);
+        const inliner = await Inliner(request, "", options.frameworkBranch);
         const pageResponse = PageResponse.html`
           <!DOCTYPE html>
           <html lang="${request.language}">
