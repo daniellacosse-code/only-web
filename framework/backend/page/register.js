@@ -151,7 +151,7 @@ export default (route, options) => {
         const pageResponse = PageResponse.html`
           <!DOCTYPE html>
           <html lang="${request.language}">
-            ${inliner.frameworkBundles("", "")}
+            ${inliner.frameworkBundles("$Shared", "$Frontend")}
             ${response}
             <script type="module">
               (function () {

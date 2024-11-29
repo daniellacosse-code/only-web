@@ -15,9 +15,14 @@ import Shared from "../../shared/bundle.js";
  * Creates a context-aware inliner that can inline elements, messages, and metadata into an HTML document.
  * @param {PageRequest} request The request object.
  * @param {string} [messagesFolder] The path to the messages folder.
+ * @param {string} [branch] The production branch to load framework bundles from.
  * @returns {Promise<Inliner>} The inliner.
  */
-export default async function Inliner(request, messagesFolder) {
+export default async function Inliner(
+  request,
+  messagesFolder,
+  branch = "main"
+) {
   const origin = request.url.origin;
 
   /** @type {{[messageIn: string]: string}} */
@@ -231,7 +236,7 @@ export default async function Inliner(request, messagesFolder) {
 
     frameworkBundles(...bundleNames) {
       Shared.Log({
-        message: `[framework/backend/inliner#sources] inlining sources "${bundleNames.join(
+        message: `[framework/backend/inliner#frameworkBundles] inlining sources "${bundleNames.join(
           ", "
         )}"`,
         level: "debug"
@@ -239,7 +244,22 @@ export default async function Inliner(request, messagesFolder) {
 
       const result = [];
 
-      for (const code of bundleNames) {
+      for (const name of bundleNames) {
+        let code;
+        try {
+          code = Deno.readTextFileSync(
+            path.join(Deno.cwd(), "bundles", `${name}.js`)
+          );
+        } catch (e) {
+          code = Deno.readTextFileSync(
+            new URL(
+              `https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/refs/heads/${branch}/bundles/${encodeURIComponent(
+                name
+              )}.js`
+            )
+          );
+        }
+
         result.push(
           Response.html`<script
             type="module"
@@ -252,16 +272,14 @@ export default async function Inliner(request, messagesFolder) {
           ></script>`
         );
 
-        console.log(code);
-
         Shared.Log({
-          message: `[framework/backend/inliner#sources] inlined source "${code}"`,
+          message: `[framework/backend/inliner#frameworkBundles] inlined bundle "${code}"`,
           level: "debug"
         });
       }
 
       Shared.Log({
-        message: `[framework/backend/inliner#sources] completed for "${bundleNames.join(
+        message: `[framework/backend/inliner#frameworkBundles] completed for "${bundleNames.join(
           ", "
         )}"`,
         level: "debug"
