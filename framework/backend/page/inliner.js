@@ -1,10 +1,11 @@
 // @ts-check
 
+import { bundle } from "https://deno.land/x/emit@0.40.0/mod.ts";
 import { encodeBase64 } from "https://deno.land/std@v0.224.0/encoding/base64.ts";
 import * as path from "https://deno.land/std@0.221.0/path/mod.ts";
 
 import Response from "./response.js";
-import Shared from "../../shared/module.js";
+import Shared from "../../shared/bundle.js";
 
 /**
  * @typedef {import("./model.js").PageRequest} PageRequest
@@ -15,9 +16,14 @@ import Shared from "../../shared/module.js";
  * Creates a context-aware inliner that can inline elements, messages, and metadata into an HTML document.
  * @param {PageRequest} request The request object.
  * @param {string} [messagesFolder] The path to the messages folder.
+ * @param {string} [branch] The production branch to load framework bundles from.
  * @returns {Promise<Inliner>} The inliner.
  */
-export default async function Inliner(request, messagesFolder) {
+export default async function Inliner(
+  request,
+  messagesFolder,
+  branch = "main"
+) {
   const origin = request.url.origin;
 
   /** @type {{[messageIn: string]: string}} */
@@ -229,9 +235,9 @@ export default async function Inliner(request, messagesFolder) {
       return Response.html`${tags}`;
     },
 
-    sources(...sourceCodes) {
+    async frameworkBundles(...bundleNames) {
       Shared.Log({
-        message: `[framework/backend/inliner#sources] inlining sources "${sourceCodes.join(
+        message: `[framework/backend/inliner#frameworkBundles] inlining sources "${bundleNames.join(
           ", "
         )}"`,
         level: "debug"
@@ -239,7 +245,31 @@ export default async function Inliner(request, messagesFolder) {
 
       const result = [];
 
-      for (const code of sourceCodes) {
+      for (const bundleName of bundleNames) {
+        let code;
+        try {
+          code = $Shared.HTML.minify(
+            (
+              await bundle(
+                path.join(
+                  Deno.cwd(),
+                  `framework/${bundleName
+                    .slice(1)
+                    .toLocaleLowerCase()}/bundle.js`
+                )
+              )
+            ).code
+          );
+        } catch (e) {
+          code = await (
+            await fetch(
+              `https://raw.githubusercontent.com/daniellacosse-code/onlyweb.dev/refs/heads/${branch}/bundles/${encodeURIComponent(
+                bundleName
+              )}.js`
+            )
+          ).text();
+        }
+
         result.push(
           Response.html`<script
             type="module"
@@ -252,16 +282,14 @@ export default async function Inliner(request, messagesFolder) {
           ></script>`
         );
 
-        console.log(code);
-
         Shared.Log({
-          message: `[framework/backend/inliner#sources] inlined source "${code}"`,
+          message: `[framework/backend/inliner#frameworkBundles] inlined bundle "${code}"`,
           level: "debug"
         });
       }
 
       Shared.Log({
-        message: `[framework/backend/inliner#sources] completed for "${sourceCodes.join(
+        message: `[framework/backend/inliner#frameworkBundles] completed for "${bundleNames.join(
           ", "
         )}"`,
         level: "debug"

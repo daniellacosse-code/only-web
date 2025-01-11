@@ -28,7 +28,6 @@ A basic understanding of native web development. MDN has a great [introduction t
 
 <img width="500" alt="Screenshot 2024-10-03 at 19 39 03" src="https://github.com/user-attachments/assets/b647a602-3254-4c8a-a732-a7f1686fb5bd">
 
-
 ```
 cpu: Apple M1 Max
 runtime: deno 1.40.5 (aarch64-apple-darwin)
@@ -89,6 +88,10 @@ This is abstract, so let's walk through a simple example to make things more con
 > When in doubt, everything in the framework has JSDoc annotations - just look at the source!
 
 ### basic tutorial
+
+> [!ERROR]
+> This is currently out of date due to a regression that has since been fixed.
+> The plan is to update the tutorial ASAP - please watch [this issue](https://github.com/daniellacosse-code/onlyweb.dev/issues/216) to track.
 
 1. Start by registering the main **Page** we're going to serve from the backend:
 
