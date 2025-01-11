@@ -89,7 +89,7 @@ This is abstract, so let's walk through a simple example to make things more con
 
 ### basic tutorial
 
-> [!ERROR]
+> [!CAUTION]
 > This is currently out of date due to a regression that has since been fixed.
 > The plan is to update the tutorial ASAP - please watch [this issue](https://github.com/daniellacosse-code/onlyweb.dev/issues/216) to track.
 
